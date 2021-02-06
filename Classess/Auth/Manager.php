@@ -9,7 +9,6 @@ class Manager extends Employee
         parent::__construct($id, $email, $nic, $fname, $mobileNo, $designation, $branchCode, $DOB, $currentAddress, $dp, $joinedDate);
     }
 
-    
 }
 
 ?>

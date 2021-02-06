@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>404 Page | | Core Bank</title>
+    <title>403 Page | | Core Bank</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
@@ -15,44 +15,44 @@
     <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet">
     <!-- Bootstrap CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../cssbootstrap.min.css">
     <!-- Bootstrap CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../cssfont-awesome.min.css">
     <!-- owl.carousel CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/owl.carousel.css">
-    <link rel="stylesheet" href="../css/owl.theme.css">
-    <link rel="stylesheet" href="../css/owl.transitions.css">
+    <link rel="stylesheet" href="../cssowl.carousel.css">
+    <link rel="stylesheet" href="../cssowl.theme.css">
+    <link rel="stylesheet" href="../cssowl.transitions.css">
     <!-- animate CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="../cssanimate.css">
     <!-- normalize CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../cssnormalize.css">
     <!-- main CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../cssmain.css">
     <!-- morrisjs CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/morrisjs/morris.css">
+    <link rel="stylesheet" href="../cssmorrisjs/morris.css">
     <!-- mCustomScrollbar CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/scrollbar/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="../cssscrollbar/jquery.mCustomScrollbar.min.css">
     <!-- metisMenu CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/metisMenu/metisMenu.min.css">
-    <link rel="stylesheet" href="../css/metisMenu/metisMenu-vertical.css">
+    <link rel="stylesheet" href="../cssmetisMenu/metisMenu.min.css">
+    <link rel="stylesheet" href="../cssmetisMenu/metisMenu-vertical.css">
     <!-- calendar CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/calendar/fullcalendar.min.css">
-    <link rel="stylesheet" href="../css/calendar/fullcalendar.print.min.css">
+    <link rel="stylesheet" href="../csscalendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="../csscalendar/fullcalendar.print.min.css">
     <!-- style CSS
 		============================================ -->
     <link rel="stylesheet" href="../style.css">
     <!-- responsive CSS
 		============================================ -->
-    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../cssresponsive.css">
     <!-- modernizr JS
 		============================================ -->
     <script src="../js/vendor/modernizr-2.8.3.min.js"></script>
@@ -62,11 +62,11 @@
     <!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
-    <div class="error-pagewrap">
+	<div class="error-pagewrap">
 		<div class="error-page-int">
 			<div class="content-error">
-				<h1>ERROR <span class="counter"> 404</span></h1>
-				<p>Sorry, but the page you are looking for has note been found. Try checking the URL for the error, then hit the refresh button on your browser or try found something else in our app.</p>
+				<h1>Server Error <span class="counter"> 403</span></h1>
+				<p>The HTTP 403 Forbidden client error status response code indicates that the server understood the request but refuses to authorize it.</p>
 				<a href="../index.php">Dashboard</a>
 			</div>
 			<div class="text-center login-footer">
@@ -102,15 +102,15 @@
 		============================================ -->
     <script src="../js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="../js/scrollbar/mCustomScrollbar-active.js"></script>
+    <!-- metisMenu JS
+		============================================ -->
+    <script src="../js/metisMenu/metisMenu.min.js"></script>
+    <script src="../js/metisMenu/metisMenu-active.js"></script>
     <!-- counterup JS
 		============================================ -->
     <script src="../js/counterup/jquery.counterup.min.js"></script>
     <script src="../js/counterup/waypoints.min.js"></script>
     <script src="../js/counterup/counterup-active.js"></script>
-    <!-- metisMenu JS
-		============================================ -->
-    <script src="../js/metisMenu/metisMenu.min.js"></script>
-    <script src="../js/metisMenu/metisMenu-active.js"></script>
     <!-- morrisjs JS
 		============================================ -->
     <script src="../js/sparkline/jquery.sparkline.min.js"></script>
@@ -129,7 +129,7 @@
     <!-- main JS
 		============================================ -->
     <script src="../js/main.js"></script>
-     <!-- tawk chat JS
+	<!-- tawk chat JS
 		============================================ -->
     <script src="../js/tawk-chat.js"></script>
 </body>

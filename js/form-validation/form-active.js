@@ -186,23 +186,24 @@
 		});
  
  // Validation for order form
-		$(".addcourse").validate(
+		$(".addaccount").validate(
 		{					
 			rules:
 			{	
-				coursename:
+				nic:
 				{
 					required: true
 				},
-				finish:
+				branch:
 				{
 					required: true
 				},
-				duration:
+				balance:
 				{
-					required: true
+					required: true,
+					min:0
 				},
-				price:
+				acctype:
 				{
 					required: true
 				},
@@ -250,21 +251,21 @@
 			},
 			messages:
 			{	
-				coursename:
+				nic:
 				{
-					required: 'Please enter course name'
+					required: 'Please enter Customer NIC'
 				},
-				finish:
+				branch:
 				{
-					required: 'Please select date of birth'
+					required: 'You Change the source.'
 				},
-				duration:
+				balance:
 				{
-					required: 'Please enter duration'
+					required: 'Enter initial balance'
 				},
-				price:
+				acctype:
 				{
-					required: 'Please enter price'
+					required: 'Select type of account'
 				},
 				imageico:
 				{
