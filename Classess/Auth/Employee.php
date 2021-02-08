@@ -5,6 +5,8 @@ use Includes\DB\Connection;
 use Classess\Account\Account;
 use Includes\Plans\FDPlan;
 use Includes\Plans\SavingPlan;
+use Includes\Transaction\Deposit;
+use Includes\Transaction\Withdraw;
 
 class Employee extends User implements Staff
 {
@@ -144,6 +146,24 @@ class Employee extends User implements Staff
             <td>".$account["closed_date"]."</td></tr>";
         }
         return $tblQuery;
+    }
+
+    /**
+     * Deposit Money from Customer
+     */
+    public function depositMoney($accID, $amount, $description):string
+    {
+        $deposit = new Deposit($accID, $amount, $description, parent::getBrachCode(), $this->id);
+        return $deposit->makeDeposit();
+    }
+
+    /**
+     * Withdraw Money from Customer
+     */
+    public function withdrawMoney($accID, $amount, $description):string
+    {
+        $deposit = new Withdraw($accID, $amount, $description, parent::getBrachCode(), $this->id);
+        return $deposit->makeWithDraw();
     }
 }
 

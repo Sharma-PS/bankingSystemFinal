@@ -4179,7 +4179,7 @@ div#sparklinehome canvas {
 	border:1px solid #D80027;
 	outline:none;
 }
-.add-professors .invalid, .addcourse .invalid, .comment .invalid, .addcoursepro .invalid, .add-department .invalid {
+.add-professors .invalid, .addcourse .invalid, .comment .invalid, .addcoursepro .invalid, .add-department .invalid, .depositMoney .invalid, .add-branch .invalid, .edit-branch .invalid{
     color: #D80027;
 }
 .form-group textarea{
@@ -4722,4 +4722,9 @@ div#sparklinehome canvas {
 
 .redTxt{
     color: #da2143 !important;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
 }

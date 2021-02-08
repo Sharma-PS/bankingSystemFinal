@@ -312,6 +312,168 @@
 				error.insertAfter(element.parent());
 			}
 		});
+
+		// Validation for login form
+		$(".add-branch").validate(
+			{					
+				rules:
+				{	
+					branch_name:
+					{
+						required: true
+					},
+					branch_code:
+					{
+						required: true
+					},
+					branch_type:
+					{
+						required: true
+						
+					},
+					contact:
+					{
+						required: true,
+						minlength: 10,
+						maxlength: 10
+	
+					},
+					status:
+					{
+						required: true
+					},
+					open:
+					{
+						required: true
+					},
+					branch_address:
+					{
+						required: true
+					}
+				},
+				messages:
+				{	
+					branch_name:
+					{
+						required: "Please Type Branch Name"
+					},
+					branch_code:
+					{
+						required: "Please Enter the BranchCode "
+					},
+					branch_type:
+					{
+						required: "Please Select the Branch Type"
+					},
+					contact:
+					{
+						required: "Please Enter the Branch Contact number",
+						minlength : "Please Enter valid Branch Contact number",
+						maxlength : "Please Enter valid Branch Contact number"
+					},
+					status:
+					{
+						required: "Please Select the Status of Branch"
+					},
+					open:
+					{
+						required: "Please Select the Open date of Branch"
+					},
+					branch_address:
+					{
+						required: "Please Enter the Branch address"
+					}
+				},					
+				
+				errorPlacement: function(error, element)
+				{
+					error.insertAfter(element.parent());
+				}
+			});
+	// Validation for login form
+			$(".edit-branch").validate(
+				{					
+					rules:
+					{	
+						branch_name:
+						{
+							required: true
+						},
+						branch_type:
+						{
+							required: true
+							
+						},
+						contact:
+						{
+							required: true,
+							minlength: 10,
+							maxlength: 10
+		
+						},
+						branch_address:
+						{
+							required: true
+						}
+					},
+					messages:
+					{	
+						branch_name:
+						{
+							required: "Please Type Branch Name"
+						},
+						branch_type:
+						{
+							required: "Please Select the Branch Type"
+						},
+						contact:
+						{
+							required: "Please Enter the Branch Contact number",
+							minlength : "Please Enter valid Branch Contact number",
+							maxlength : "Please Enter valid Branch Contact number"
+						},
+						branch_address:
+						{
+							required: "Please Enter the Branch address"
+						}
+					},					
+					
+					errorPlacement: function(error, element)
+					{
+						error.insertAfter(element.parent());
+					}
+				});
+
+		$(".depositMoney").validate(
+			{					
+				rules:
+				{	
+					accID:
+					{
+						required: true
+					},
+					amountOfMoney:
+					{
+						required: true
+					}
+				},
+				messages:
+				{						
+					accID:
+					{
+						required: "Please enter customer Account No."
+					},
+					amountOfMoney:
+					{
+						required: "Please enter amount of transfer money."
+					}
+				},					
+				
+				errorPlacement: function(error, element)
+				{
+					error.insertAfter(element.parent());
+				}
+			});
 		
 		
 		

@@ -73,6 +73,9 @@ use Classess\Auth\Staff;
     <!-- responsive CSS
 		============================================ -->
     <link rel="stylesheet" href="../css/responsive.css">
+    <!-- forms CSS
+		============================================ -->
+    <link rel="stylesheet" href="../css/form/all-type-forms.css">
     <!-- modernizr JS
 		============================================ -->
     <script src="../js/vendor/modernizr-2.8.3.min.js"></script>
@@ -87,8 +90,8 @@ use Classess\Auth\Staff;
     <div class="left-sidebar-pro">
         <nav id="sidebar" class="">
             <div class="sidebar-header">
-                <a href="index.php"><img class="main-logo" src="../img/logo/logo.png" alt="" /></a>
-                <strong><a href="index.php"><img src="../img/logo/logosn.png" alt="" /></a></strong>
+                <a href="index.php"><img class="main-logo" src="../img/logo/logosn.png" alt="logo" width="50px"/></a>
+                <strong><a href="index.php"><img src="../img/logo/logosn.png" alt="logo" /></a></strong>
             </div>
             <div class="left-custom-menu-adp-wrap comment-scrollbar">
                 <nav class="sidebar-nav left-sidebar-menu-pro">
@@ -156,6 +159,13 @@ use Classess\Auth\Staff;
                                 <li><a title="View All Account" href="../Account/viewAccount.php"><span class="mini-sub-pro">View All Account</span></a></li>
                             </ul>
                         </li>
+                        <li>
+                            <a class="has-arrow" href="mailbox.php" aria-expanded="false"><span class="educate-icon educate-interface icon-wrap"></span> <span class="mini-click-non">Transacation</span></a>
+                            <ul class="submenu-angle interface-mini-nb-dp" aria-expanded="false">                                
+                                <li><a title="Images Cropper" href="../Transaction/deposit.php"><span class="mini-sub-pro">Deposit</span></a></li>
+                                <li><a title="Images Cropper" href="../Transaction/withdrawal.php"><span class="mini-sub-pro">Withdraw</span></a></li>
+                            </ul>
+                        </li>
                         <?php
                             }
                             if ($loginedUser instanceof HeadManager) {
@@ -168,6 +178,15 @@ use Classess\Auth\Staff;
                                 <li><a title="Line Charts" href="line-charts.php"><span class="mini-sub-pro">Loan Interest Plans</span></a></li>                                
                             </ul>
                         </li>
+                        <!-- Branches sidebar-->
+                        <li class="active">
+                            <a class="has-arrow" href="all-courses.php" aria-expanded="false"><span class="educate-icon educate-department icon-wrap"></span> <span class="mini-click-non">Branches</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="Branches List" href="../Branch/branch.php"><span class="mini-sub-pro">Branches List</span></a></li>
+                                <li><a title="Add Branches" href="../Branch/add-branch.php"><span class="mini-sub-pro">Add Branch</span></a></li>
+                            </ul>
+                        </li>
+                        <!-- Branches sidebar-->
                         <?php
                             }
                         ?>
