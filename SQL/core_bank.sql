@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 06, 2021 at 07:12 PM
+-- Generation Time: Feb 08, 2021 at 08:27 AM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -67,16 +67,15 @@ CREATE TABLE IF NOT EXISTS `account` (
   PRIMARY KEY (`accID`),
   KEY `has` (`NIC`),
   KEY `Opened branch code` (`branchCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `account`
 --
 
 INSERT INTO `account` (`accID`, `NIC`, `branchCode`, `balance`, `createdDate`, `updatedDate`, `type`, `status`, `closed_date`) VALUES
-(7, '990022984v', 'b001', '101600.00', '2021-02-01 15:02:19', '2021-02-04 08:45:57', 'saving', 1, NULL),
-(8, '980021422v', 'b002', '196000.00', '2021-02-01 17:48:51', '2021-02-06 22:29:36', 'current', 0, '2021-02-04'),
-(38, '981234567v', 'b001', '232232.00', '2021-02-06 23:33:56', '2021-02-06 23:33:56', 'current', 1, NULL);
+(7, '990022984v', 'b001', '90500.00', '2021-02-01 15:02:19', '2021-02-08 12:49:12', 'saving', 1, NULL),
+(8, '980021422v', 'b002', '145000.00', '2021-02-01 17:48:51', '2021-02-08 00:54:50', 'current', 0, '2021-02-04');
 
 -- --------------------------------------------------------
 
@@ -121,8 +120,9 @@ CREATE TABLE IF NOT EXISTS `branch` (
 --
 
 INSERT INTO `branch` (`branchCode`, `branchName`, `Address`, `type`, `contactNo`, `openedDate`, `updatedDate`, `status`) VALUES
-('b001', 'Jaffna', 'Jaffna town', 'H_O', 1234567890, '2021-01-14', '2021-01-15 09:16:26', '1'),
-('b002', 'Colombo', 'Colombo', 'br', 987654321, '2021-01-01', '2021-01-15 09:06:25', '1');
+('b001', 'Jaffna', 'Jaffna town', 'H_O', 1234567890, '2021-01-14', '2021-02-08 13:38:19', '1'),
+('b002', 'Colombo', 'Colombo', 'br', 987654321, '2021-01-01', '2021-02-08 13:38:21', '0'),
+('b020', 'Kandy', 'Pera', 'br', 771234567, '2021-02-07', '2021-02-08 13:11:35', '1');
 
 -- --------------------------------------------------------
 
@@ -176,18 +176,23 @@ CREATE TABLE IF NOT EXISTS `deposit` (
   `amount` decimal(30,2) NOT NULL,
   `Description` text,
   `branchCode` varchar(50) NOT NULL,
+  `deposit_by` int(11) DEFAULT NULL,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`deposit_id`),
   KEY `depositBrach` (`branchCode`),
-  KEY `deposit Account` (`accID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+  KEY `deposit Account` (`accID`),
+  KEY `depositBy` (`deposit_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `deposit`
 --
 
-INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCode`, `time`) VALUES
-(8, 7, '1800.00', NULL, 'b001', '2021-02-01 15:20:51');
+INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCode`, `deposit_by`, `time`) VALUES
+(8, 7, '1800.00', NULL, 'b001', 5, '2021-02-01 15:20:51'),
+(9, 7, '800.00', NULL, 'b002', 5, '2021-02-08 00:35:21'),
+(10, 8, '4000.00', NULL, 'b001', 1, '2021-02-08 00:39:46'),
+(11, 7, '1600.00', 'Fund Rise', 'b001', 1, '2021-02-08 00:40:43');
 
 --
 -- Triggers `deposit`
@@ -234,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
 INSERT INTO `employee` (`ID`, `name`, `NIC`, `email`, `password`, `branchCode`, `designation`, `mobileNo`, `Address`, `DOB`, `dp`, `JoinedDate`, `UpdatedDate`, `leftDate`) VALUES
 (1, 'HM_xxx', '123456789v', 'headofficemanager@gmail.com', '950a2c1b68ef6dd154800e089f20282a', 'b001', 'head_manager', 1234567890, 'Sample address', '2019-08-08', NULL, '2021-01-15 08:58:48', '2021-01-17 10:08:07', NULL),
 (2, 'Man_yyy', '987654321v', 'manager@gmail.com', '1d0258c2440a8d19e716292b231e3190', 'b002', 'manager', 1234567890, 'Sample 2 address', '2020-08-03', NULL, '2021-01-15 09:05:36', '2021-01-15 09:05:36', NULL),
-(4, 'S_jaffna', '543216789v', 'staffjaffna@gmail.com', '754acdffa5a29adb68d88ef04d380d73', 'b001', 'staff', 1234567890, 'jaffna', '2020-06-15', NULL, '2021-01-15 09:13:24', '2021-01-15 09:13:24', NULL),
+(4, 'S_jaffna', '543216789v', 'staffjaffna@gmail.com', '03a9b752cdc8c8d5f1fb3cac18bf7131', 'b001', 'staff', 1234567890, 'jaffna', '2020-06-15', NULL, '2021-01-15 09:13:24', '2021-02-07 00:52:26', NULL),
 (5, 'S_colombo', '990022132v', 'staffcolombo@gmail.com', '8be46aff6e2601f09204dd35268c4114', 'b002', 'staff', 987654321, 'sample', '2020-08-17', NULL, '2021-01-15 09:13:24', '2021-01-15 09:13:24', NULL);
 
 -- --------------------------------------------------------
@@ -302,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `saving_account` (
 --
 
 INSERT INTO `saving_account` (`accID`, `s_plan_id`, `no_of_withdrawals`) VALUES
-(7, 'Adult', 0);
+(7, 'Adult', 2);
 
 -- --------------------------------------------------------
 
@@ -384,18 +389,22 @@ CREATE TABLE IF NOT EXISTS `withdrawal` (
   `amount` decimal(30,2) NOT NULL,
   `Description` text,
   `branchCode` varchar(50) NOT NULL,
+  `withdrew_by` int(11) NOT NULL,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`withdrawal_id`),
   KEY `take Money` (`accID`),
-  KEY `location` (`branchCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  KEY `location` (`branchCode`),
+  KEY `withdrewBy` (`withdrew_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `withdrawal`
 --
 
-INSERT INTO `withdrawal` (`withdrawal_id`, `accID`, `amount`, `Description`, `branchCode`, `time`) VALUES
-(1, 7, '600.00', NULL, 'b002', '2021-02-01 15:23:54');
+INSERT INTO `withdrawal` (`withdrawal_id`, `accID`, `amount`, `Description`, `branchCode`, `withdrew_by`, `time`) VALUES
+(1, 7, '4500.00', NULL, 'b001', 1, '2021-02-08 12:47:59'),
+(2, 7, '3000.00', NULL, 'b001', 1, '2021-02-08 12:48:41'),
+(3, 7, '2000.00', NULL, 'b001', 1, '2021-02-08 12:49:12');
 
 --
 -- Triggers `withdrawal`
@@ -441,7 +450,8 @@ ALTER TABLE `customer`
 --
 ALTER TABLE `deposit`
   ADD CONSTRAINT `deposit Account` FOREIGN KEY (`accID`) REFERENCES `account` (`accID`),
-  ADD CONSTRAINT `depositBrach` FOREIGN KEY (`branchCode`) REFERENCES `branch` (`branchCode`);
+  ADD CONSTRAINT `depositBrach` FOREIGN KEY (`branchCode`) REFERENCES `branch` (`branchCode`),
+  ADD CONSTRAINT `depositBy` FOREIGN KEY (`deposit_by`) REFERENCES `employee` (`ID`);
 
 --
 -- Constraints for table `employee`
@@ -475,7 +485,8 @@ ALTER TABLE `transaction`
 --
 ALTER TABLE `withdrawal`
   ADD CONSTRAINT `location` FOREIGN KEY (`branchCode`) REFERENCES `branch` (`branchCode`),
-  ADD CONSTRAINT `take Money` FOREIGN KEY (`accID`) REFERENCES `account` (`accID`);
+  ADD CONSTRAINT `take Money` FOREIGN KEY (`accID`) REFERENCES `account` (`accID`),
+  ADD CONSTRAINT `withdrewBy` FOREIGN KEY (`withdrew_by`) REFERENCES `employee` (`ID`);
 
 DELIMITER $$
 --
