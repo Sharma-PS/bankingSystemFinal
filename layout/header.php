@@ -164,6 +164,7 @@ use Classess\Auth\Staff;
                             <ul class="submenu-angle interface-mini-nb-dp" aria-expanded="false">                                
                                 <li><a title="Images Cropper" href="../Transaction/deposit.php"><span class="mini-sub-pro">Deposit</span></a></li>
                                 <li><a title="Images Cropper" href="../Transaction/withdrawal.php"><span class="mini-sub-pro">Withdraw</span></a></li>
+                                <li><a title="Images Cropper" href="../Transaction/MoneyTransfer.php"><span class="mini-sub-pro">TransferMoney</span></a></li>
                             </ul>
                         </li>
                         <?php
@@ -175,11 +176,11 @@ use Classess\Auth\Staff;
                             <ul class="submenu-angle chart-mini-nb-dp" aria-expanded="false">
                                 <li><a title="Bar Charts" href="../Plan/savingPlan.php"><span class="mini-sub-pro">Saving Plans</span></a></li>
                                 <li><a title="Line Charts" href="../Plan/FDplan.php"><span class="mini-sub-pro">FD Plans</span></a></li>                                
-                                <li><a title="Line Charts" href="line-charts.php"><span class="mini-sub-pro">Loan Interest Plans</span></a></li>                                
+                                <li><a title="Line Charts" href="../Plan/loanPlan.php"><span class="mini-sub-pro">Loan Interest Plans</span></a></li>                                
                             </ul>
                         </li>
                         <!-- Branches sidebar-->
-                        <li class="active">
+                        <li>
                             <a class="has-arrow" href="all-courses.php" aria-expanded="false"><span class="educate-icon educate-department icon-wrap"></span> <span class="mini-click-non">Branches</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
                                 <li><a title="Branches List" href="../Branch/branch.php"><span class="mini-sub-pro">Branches List</span></a></li>

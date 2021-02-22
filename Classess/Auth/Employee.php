@@ -5,7 +5,9 @@ use Includes\DB\Connection;
 use Classess\Account\Account;
 use Includes\Plans\FDPlan;
 use Includes\Plans\SavingPlan;
+use Includes\Plans\LoanPlan;
 use Includes\Transaction\Deposit;
+use Includes\Transaction\TransferMoney;
 use Includes\Transaction\Withdraw;
 
 class Employee extends User implements Staff
@@ -127,6 +129,27 @@ class Employee extends User implements Staff
         return $tblQuery;
     }
 
+    /**
+     * get All Loan plans as Table
+     */
+    public function getAllLoanPlans():string
+    {
+        $loans = (new LoanPlan())->getAllLoanPlans();
+        $tblQuery = "";
+        foreach ($loans as $key => $value) {            
+            $tblQuery = $tblQuery . 
+            "<tr>
+                <td>".(++$key)."</td>
+                <td><b>".$value['loanPlanId']."</b></td>
+                <td>".$value["description"]."</td>                
+                <td><span class='pie'>".$value['rate']."/100</span>".$value['rate']." %</td>            
+                <td>".$value['maximumAmount']."</td>
+                <td>".$value['max_loan_in_SA']." %</td>
+            </tr>";
+        }
+        return $tblQuery;
+    }
+
     public function ViewAllAccounts():string
     {
         $accounts = (new Account)->ViewAllAccounts();
@@ -162,8 +185,17 @@ class Employee extends User implements Staff
      */
     public function withdrawMoney($accID, $amount, $description):string
     {
-        $deposit = new Withdraw($accID, $amount, $description, parent::getBrachCode(), $this->id);
-        return $deposit->makeWithDraw();
+        $withDraw = new Withdraw($accID, $amount, $description, parent::getBrachCode(), $this->id);
+        return $withDraw->makeWithDraw();
+    }
+    
+    /**
+     * Withdraw Money from Customer
+     */
+    public function TransferMoney($FaccID, $TaccID, $amount, $description):string
+    {
+        $transfer = new TransferMoney($FaccID, $TaccID, $amount, $description);
+        return $transfer->makeTransfer();
     }
 }
 

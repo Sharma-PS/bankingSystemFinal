@@ -2,12 +2,12 @@
 namespace Includes\Plans;
 use Includes\DB\Connection;
 
-class FDPlan extends Connection
+class LoanPlan extends Connection
 {
     private $allPlans;
     public function __construct()
     {
-        $sql = "SELECT * FROM fd_plan";
+        $sql = "SELECT * FROM loan_plan";
         $stmt = (new Connection)->connect()->prepare($sql);
         $stmt->execute();
         $this->allPlans = $stmt->fetchAll();
@@ -16,12 +16,11 @@ class FDPlan extends Connection
     /**
      * return All FD plans
      */
-    public function getAllFDPlans():array
+    public function getAllLoanPlans():array
     {
         return $this->allPlans;
     }
     
-
 }
 
 

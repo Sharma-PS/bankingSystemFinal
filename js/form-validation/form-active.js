@@ -474,6 +474,45 @@
 					error.insertAfter(element.parent());
 				}
 			});
+
+			$(".TransferMoney").validate(
+				{					
+					rules:
+					{	
+						FaccID:
+						{
+							required: true
+						},
+						TaccID:
+						{
+							required: true
+						},
+						amountOfMoney:
+						{
+							required: true
+						}
+					},
+					messages:
+					{						
+						FaccID:
+						{
+							required: "Please enter customer Sender Account No."
+						},
+						TaccID:
+						{
+							required: "Please enter customer To Account No."
+						},
+						amountOfMoney:
+						{
+							required: "Please enter amount of transfer money."
+						}
+					},					
+					
+					errorPlacement: function(error, element)
+					{
+						error.insertAfter(element.parent());
+					}
+				});
 		
 		
 		
