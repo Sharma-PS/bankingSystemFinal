@@ -62,8 +62,7 @@ abstract class User extends Connection{
      * @return NIC
      */
     public function getNIC():String
-    {
-        echo $this->NIC;
+    {   
         return $this->nic;
     }
 
@@ -102,10 +101,26 @@ abstract class User extends Connection{
     /**
      * @return dp
      */
-    public function getDp():String
+    public function getDp()
     {
         return $this->dp;
     }
+    /**
+     * @return left date
+     */
+    public function getLeftDate()
+    {
+        return $this->leftDate;
+    }
+
+    /**
+     * setter
+     */
+    public function setLeftDate($date):void
+    {
+        $this->leftDate = $date;
+    }
+    
     
 }
 

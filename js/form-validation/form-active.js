@@ -1,127 +1,97 @@
 (function ($) {
  "use strict";
  // Validation for order form
-		$(".add-professors").validate(
-		{					
-			rules:
-			{	
-				firstname:
-				{
-					required: true
-				},
-				lastname:
-				{
-					required: true
-				},
-				address:
-				{
-					required: true
-				},
-				department:
-				{
-					required: true
-				},
-				postcode:
-				{
-					required: true
-				},
-				imageico:
-				{
-					required: true
-				},
-				mobileno:
-				{
-					required: true
-				},
-				description:
-				{
-					required: true
-				},
-				gender:
-				{
-					required: true
-				},
-				country:
-				{
-					required: true
-				},
-				state:
-				{
-					required: true
-				},
-				city:
-				{
-					required: true
-				},
-				website:
-				{
-					required: true
-				},
-				finish:
-				{
-					required: true
-				}
+ $(".add-professors").validate(
+	{					
+		rules:
+		{	
+			fullname:
+			{
+				required: true
 			},
-			messages:
-			{	
-				firstname:
-				{
-					required: 'Please enter first name'
-				},
-				lastname:
-				{
-					required: 'Please enter last name'
-				},
-				address:
-				{
-					required: 'Please enter your address'
-				},
-				department:
-				{
-					required: 'Please enter department'
-				},
-				postcode:
-				{
-					required: 'Please enter postcode'
-				},
-				imageico:
-				{
-					required: 'Please upload image'
-				},
-				mobileno:
-				{
-					required: 'Please enter mobile number'
-				},
-				description:
-				{
-					required: 'Please enter description'
-				},
-				gender:
-				{
-					required: 'Please select gender'
-				},
-				country:
-				{
-					required: 'Please select country'
-				},
-				state:
-				{
-					required: 'Please select state'
-				},
-				city:
-				{
-					required: 'Please select city'
-				},
-				website:
-				{
-					required: 'Please enter website url'
-				},
-				finish:
-				{
-					required: 'Please select date of birth'
-				}
-			},					
+			address:
+			{
+				required: true
+			},
+			mobileNo:
+			{
+				required: true
+			},
+			NIC:
+			{
+				required: true
+			},
+			dob:
+			{
+				required: true
+			},
+			email:
+			{
+				required: true
+			},
+			job:
+			{
+				required: true
+			},
+			branchCode:
+			{
+				required: true
+			},
+			password:
+			{
+				required: true,
+				minlength: 3,
+				maxlength: 20
+			},
+			confirmpassword:
+			{
+				required: true,
+				minlength: 3,
+				maxlength: 20
+			}
+		},
+		messages:
+		{	
+			fullname:
+			{
+				required: 'Please enter full name'
+			},
 			
+			address:
+			{
+				required: 'Please enter your address'
+			},
+			mobileNo:
+			{
+				required: 'Please enter Mobile Number'
+			},
+			dob:
+			{
+				required: 'Please enter Date of Birth'
+			},
+			email:
+			{
+				required: 'Please enter your email address',
+				email: 'Please enter a VALID email address'
+			},
+			job:
+			{
+				required: 'Please select the Designation'
+			},
+			branchCode:
+			{
+				required: 'Please enter the Branch Code'
+			},
+			password:
+			{
+				required: 'Please enter the password'
+			},
+			confirmpassword:
+			{
+				required: 'Please confirm the password'
+			},
+			
+		},			
 			errorPlacement: function(error, element)
 			{
 				error.insertAfter(element.parent());

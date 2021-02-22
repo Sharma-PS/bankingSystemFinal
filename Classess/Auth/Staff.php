@@ -1,6 +1,5 @@
 <?php
 namespace Classess\Auth;
-use Classess\Account\Account;
 
 interface Staff{
     public function getDesignation():string;

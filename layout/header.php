@@ -5,6 +5,7 @@ session_start();
 require "../loginCheck.php";
 
 use Classess\Auth\HeadManager;
+use Classess\Auth\Manager;
 use Classess\Auth\Staff;
 ?>
 <html class="no-js" lang="en">
@@ -169,6 +170,18 @@ use Classess\Auth\Staff;
                         </li>
                         <?php
                             }
+                            if ($loginedUser instanceof Manager){
+                        ?>
+                        <li>
+                            <a class="has-arrow" href="all-professors.php" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Staffs</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="All Staff" href="../manager/all-staff.php"><span class="mini-sub-pro">All Staffs</span></a></li>
+                                <li><a title="Add Staff" href="../manager/add-staff.php"><span class="mini-sub-pro">Add Staff</span></a></li>                               
+                            </ul>
+                        </li>
+
+                        <?php
+                            }
                             if ($loginedUser instanceof HeadManager) {
                         ?>
                         <li>
@@ -188,6 +201,14 @@ use Classess\Auth\Staff;
                             </ul>
                         </li>
                         <!-- Branches sidebar-->
+
+                        <li>
+                            <a class="has-arrow" href="all-professors.php" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Managers</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="All Staff" href="../Head_manager/all-manager.php"><span class="mini-sub-pro">All Managers</span></a></li>
+                                <li><a title="Add Staff" href="../Head_manager/add-manger.php"><span class="mini-sub-pro">Add Manager</span></a></li>                               
+                            </ul>
+                        </li>
                         <?php
                             }
                         ?>
@@ -543,11 +564,7 @@ use Classess\Auth\Staff;
                                                 <li><a href="edit-library-assets.php">Edit Library Asset</a>
                                                 </li>
                                             </ul>
-                                        </li>
-
-                                        <?php
-                                        
-                                        ?>
+                                        </li>            
 
                                         <li><a data-toggle="collapse" data-target="#demodepart" href="#">Departments <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul id="demodepart" class="collapse dropdown-header-top">
