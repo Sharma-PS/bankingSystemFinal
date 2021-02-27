@@ -3,6 +3,7 @@ namespace Classess\Auth;
 
 use Includes\DB\Connection;
 use Classess\Account\Account;
+use Includes\FD\FD;
 use Includes\Plans\FDPlan;
 use Includes\Plans\SavingPlan;
 use Includes\Plans\LoanPlan;
@@ -86,6 +87,22 @@ class Employee extends User implements Staff
     }
 
     /**
+     * Create new account 
+     */
+    public function createFD($said, $balance, $type):string
+    {
+        if($type == "3 year"){
+            $mn = "36";
+        }elseif($type == "one year"){
+            $mn = "12";
+        }elseif($type == "half year"){
+            $mn = "6";
+        }
+        $fd = new FD(NULL, $said, $balance, $type, NULL, date('Y-m-d', strtotime(date("Y-m-d")."+ ".$mn." months")));
+        return $fd->createNewFD();
+    }
+
+    /**
      * get All saving plans as Table
      */
     public function getAllSavingPlans($edit = NULL):string
@@ -128,6 +145,8 @@ class Employee extends User implements Staff
         }
         return $tblQuery;
     }
+
+    
 
     /**
      * get All Loan plans as Table
@@ -172,6 +191,27 @@ class Employee extends User implements Staff
     }
 
     /**
+     * View ALl FDs
+     */
+    public function ViewAllFDs():string
+    {
+        $fds = (new FD)->ViewAllFDs();
+        $tblQuery = "";
+        foreach ($fds as $fd) {
+            $status = ($fd["withdrewOrNot"]) ? ("check") : ("ban");
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$fd["FD_ID"]."</td>
+            <td>".$fd["savingAcc_id"]."</td>
+            <td>".$fd["FD_plan_id"]."</td>
+            <td> R.s ".$fd["amount"]."</td>
+            <td>".$fd["startDate"]."</td>
+            <td>".$fd["maturityDate"]."</td>           
+            <td class='datatable-ct'><i class='fa fa-$status'></i></td>            </tr>";
+        }
+        return $tblQuery;
+    }
+
+    /**
      * Deposit Money from Customer
      */
     public function depositMoney($accID, $amount, $description):string
@@ -196,6 +236,65 @@ class Employee extends User implements Staff
     {
         $transfer = new TransferMoney($FaccID, $TaccID, $amount, $description);
         return $transfer->makeTransfer();
+    }
+
+    /**
+     * View All Deposits
+     */
+    public function ViewAllDeposits():string
+    {
+        $deposits = (new Deposit)->getAllDeposits();
+        $tblQuery = "";
+        foreach ($deposits as $deposit) {            
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$deposit["deposit_id"]."</td>
+            <td>".$deposit["accID"]."</td>
+            <td> R.s ".$deposit["amount"]."</td>
+            <td>".$deposit["Description"]."</td>
+            <td>".$deposit["branchCode"]."</td>
+            <td>".$deposit["deposit_by"]."</td>           
+            <td>".$deposit["time"]."</td></tr>";
+        }
+        return $tblQuery;
+    }
+
+    /**
+     * View All Withdrawals
+     */
+    public function ViewAllWithdrawal():string
+    {
+        $withdrews = (new Withdraw)->getAllWithdraws();
+        $tblQuery = "";
+        foreach ($withdrews as $withdrew) {            
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$withdrew["withdrawal_id"]."</td>
+            <td>".$withdrew["accID"]."</td>
+            <td> R.s ".$withdrew["amount"]."</td>
+            <td>".$withdrew["Description"]."</td>
+            <td>".$withdrew["branchCode"]."</td>
+            <td>".$withdrew["withdrew_by"]."</td>           
+            <td>".$withdrew["time"]."</td></tr>";
+        }
+        return $tblQuery;
+    }
+
+    /**
+     * View All Trasactions
+     */
+    public function ViewAllTransaction():string
+    {
+        $transactions = (new TransferMoney)->getAllTransfers();
+        $tblQuery = "";
+        foreach ($transactions as $transaction) {            
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$transaction["transaction_id"]."</td>
+            <td>".$transaction["sender_id"]."</td>
+            <td>".$transaction["recipient_id"]."</td>
+            <td> R.s ".$transaction["amount"]."</td>
+            <td>".$transaction["description"]."</td>   
+            <td>".$transaction["time"]."</td></tr>";
+        }
+        return $tblQuery;
     }
 }
 

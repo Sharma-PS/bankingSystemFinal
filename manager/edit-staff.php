@@ -22,6 +22,9 @@
         $dp = "../img/profile/1.jpg";        
     }
 ?>
+<script>
+    changeTitle("Edit Staff | Core Bank");
+</script>
         <div class="breadcome-area">
                 <div class="container-fluid">
                     <div class="row">

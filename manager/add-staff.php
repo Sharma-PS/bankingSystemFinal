@@ -7,6 +7,9 @@
     $fileDestination=NULL;
     $ID= NULL;
 ?>
+<script>
+    changeTitle("Add Staff | Core Bank");
+</script>
             
             <div class="breadcome-area">
                 <div class="container-fluid">

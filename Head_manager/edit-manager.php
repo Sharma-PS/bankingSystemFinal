@@ -22,6 +22,9 @@
         
     }
 ?>
+<script>
+    changeTitle("Edit Manager | Core Bank");
+</script>
         <div class="breadcome-area">
                 <div class="container-fluid">
                     <div class="row">

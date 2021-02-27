@@ -4,6 +4,9 @@
     $fileDestination=NULL;
     $ID= NULL;
 ?>
+<script>
+    changeTitle("Add Manager | Core Bank");
+</script>
             
             <div class="breadcome-area">
                 <div class="container-fluid">
@@ -304,11 +307,11 @@
             var pattern_1 = "^[0-9]{12}$";
             var pattern_2 = "^[0-9]{9}(V|v)$";
             var nic = document.getElementById('NIC').value;
-            if ((nic.search(pattern_1) ==-1) | nic.search(pattern_2) ==-1){
-                document.getElementById('confirmNIC').innerHTML ="NIC doesn't matches the format";
+            if ((nic.search(pattern_1) !=-1) | nic.search(pattern_2) !=-1){
+                document.getElementById('confirmNIC').innerHTML ="";
                 btn.disabled = true;
             }else{
-                document.getElementById('confirmNIC').innerHTML ="";
+                document.getElementById('confirmNIC').innerHTML ="NIC doesn't matches the format";
                 btn.disabled = false;
             }
 

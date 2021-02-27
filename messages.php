@@ -185,5 +185,13 @@
     <i class='fa fa-info-circle edu-inform admin-check-pro admin-check-pro-clr1 admin-check-pro-clr12' aria-hidden='true'></i>
     <p><strong>Info!</strong> Access Denied...</p>
     </div>");
+
+    define('DONTHAVESA', "<div class='alert alert-danger alert-mg-b alert-success-style4 alert-st-bg3 alert-st-bg14' style='margin-top:20px'>
+                <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                        <span class='icon-sc-cl' aria-hidden='true' style='color:red;'>&times;</span>
+                    </button>
+                <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
+                <p><strong>OOPS!</strong> Don't Have Saving Account!... </p>
+            </div>");
                 
 ?>

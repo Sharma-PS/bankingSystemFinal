@@ -163,9 +163,24 @@ use Classess\Auth\Staff;
                         <li>
                             <a class="has-arrow" href="mailbox.php" aria-expanded="false"><span class="educate-icon educate-interface icon-wrap"></span> <span class="mini-click-non">Transacation</span></a>
                             <ul class="submenu-angle interface-mini-nb-dp" aria-expanded="false">                                
-                                <li><a title="Images Cropper" href="../Transaction/deposit.php"><span class="mini-sub-pro">Deposit</span></a></li>
-                                <li><a title="Images Cropper" href="../Transaction/withdrawal.php"><span class="mini-sub-pro">Withdraw</span></a></li>
-                                <li><a title="Images Cropper" href="../Transaction/MoneyTransfer.php"><span class="mini-sub-pro">TransferMoney</span></a></li>
+                                <li><a title="Depositr" href="../Transaction/deposit.php"><span class="mini-sub-pro">Deposit</span></a></li>
+                                <li><a title="Withdraw" href="../Transaction/withdrawal.php"><span class="mini-sub-pro">Withdraw</span></a></li>
+                                <li><a title="TransferMoney" href="../Transaction/MoneyTransfer.php"><span class="mini-sub-pro">TransferMoney</span></a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="has-arrow" href="mailbox.php" aria-expanded="false"><span class="educate-icon educate-form icon-wrap"></span> <span class="mini-click-non">View Transaction</span></a>
+                            <ul class="submenu-angle form-mini-nb-dp" aria-expanded="false">
+                                <li><a title=">View Deposits" href="../Transaction/viewDeposit.php"><span class="mini-sub-pro">View Deposits</span></a></li>                                
+                                <li><a title=">View Withdraws" href="../Transaction/viewWithdrawal.php"><span class="mini-sub-pro">View Withdrews</span></a></li>                                
+                                <li><a title=">View Transaction" href="../Transaction/viewMoneyTransfer.php"><span class="mini-sub-pro">View Transfer</span></a></li>                                
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="has-arrow" href="mailbox.php" aria-expanded="false"><span class="educate-icon educate-data-table icon-wrap"></span> <span class="mini-click-non">Fixed Deposit</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="Create FD" href="../FD/createFD.php"><span class="mini-sub-pro">Create FD</span></a></li>
+                                <li><a title="All FD" href="../FD/AllFD.php"><span class="mini-sub-pro">All FD</span></a></li>
                             </ul>
                         </li>
                         <?php

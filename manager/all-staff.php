@@ -7,7 +7,9 @@
     $fileDestination=NULL;
     $_SESSION['W_id']=NULL;
 ?>
-
+<script>
+    changeTitle("ALL Staff| Core Bank");
+</script>
            
             <div class="breadcome-area">
                 <div class="container-fluid">

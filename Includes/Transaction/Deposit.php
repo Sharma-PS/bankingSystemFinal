@@ -1,7 +1,6 @@
 <?php
 namespace Includes\Transaction;
 use Includes\DB\Connection;
-require "../messages.php";
 
 class Deposit extends Connection
 {
@@ -24,7 +23,10 @@ class Deposit extends Connection
      */
     public function getAllDeposits():array
     {
-        return $this->allDeposits;
+        $sql = "SELECT * FROM deposit ORDER BY deposit_id DESC";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();       
     }
     
     /**

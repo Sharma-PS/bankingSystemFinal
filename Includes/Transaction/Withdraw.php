@@ -1,7 +1,6 @@
 <?php
 namespace Includes\Transaction;
 use Includes\DB\Connection;
-require "../messages.php";
 
 class Withdraw extends Connection
 {
@@ -24,7 +23,10 @@ class Withdraw extends Connection
      */
     public function getAllWithdraws():array
     {
-        return $this->allWithdraws;
+        $sql = "SELECT * FROM withdrawal ORDER BY withdrawal_id DESC";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
     }
     
     /**

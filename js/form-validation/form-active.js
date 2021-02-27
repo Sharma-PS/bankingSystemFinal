@@ -360,6 +360,48 @@
 					error.insertAfter(element.parent());
 				}
 			});
+
+
+			// Validation for login form
+		$(".addaccountFD").validate(
+			{					
+				rules:
+				{	
+					sacid:
+					{
+						required: true
+					},
+					balance:
+					{
+						required: true
+					},
+					acctype:
+					{
+						required: true						
+					}
+				},
+				messages:
+				{	
+					sacid:
+					{
+						required: "Saving Account ID Required"
+					},
+					balance:
+					{
+						required: "Enter Amount"
+					},
+					acctype:
+					{
+						required: "Please select option"
+					}
+				},					
+				
+				errorPlacement: function(error, element)
+				{
+					error.insertAfter(element.parent());
+				}
+			});
+
 	// Validation for login form
 			$(".edit-branch").validate(
 				{					

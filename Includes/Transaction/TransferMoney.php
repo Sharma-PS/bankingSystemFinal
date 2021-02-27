@@ -1,7 +1,6 @@
 <?php
 namespace Includes\Transaction;
 use Includes\DB\Connection;
-require "../messages.php";
 
 class TransferMoney extends Connection
 {
@@ -23,7 +22,10 @@ class TransferMoney extends Connection
      */
     public function getAllTransfers():array
     {
-        return $this->allTransfer;
+        $sql = "SELECT * FROM transaction ORDER BY transaction_id  DESC";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
     }
     
     /**

@@ -1,7 +1,6 @@
 <?php
 namespace Classess\Account;
 use Includes\DB\Connection;
-require "../messages.php";
 class Account extends Connection
 {
     private $accID, $NIC, $branch, $balance, $type;

@@ -2,7 +2,9 @@
     include("../layout/header.php");
     $_SESSION['W_id'] = NULL;
 ?>
-
+<script>
+    changeTitle("All Managers | Core Bank");
+</script>
            
             <div class="breadcome-area">
                 <div class="container-fluid">
