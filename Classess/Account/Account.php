@@ -69,6 +69,20 @@ class Account extends Connection
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    /** change status */
+    public function changeStatus($Acc_ID, $Acc_status)
+    {
+        $sql = "UPDATE `account` SET `status` = ? WHERE `account`.`accID` = ?"; 
+        $stmt = (new Connection)->connect()->prepare($sql);
+
+        if($stmt->execute([$Acc_status, $Acc_ID])):
+            return "Sucessfully Updated.";
+        else:
+            return "Failed to Update. \n Try Again";
+        endif;
+
+    }
 }
 
 ?>

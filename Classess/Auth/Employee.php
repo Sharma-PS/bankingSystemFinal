@@ -4,6 +4,7 @@ namespace Classess\Auth;
 use Includes\DB\Connection;
 use Classess\Account\Account;
 use Includes\FD\FD;
+use Includes\Loan\Loan;
 use Includes\Plans\FDPlan;
 use Includes\Plans\SavingPlan;
 use Includes\Plans\LoanPlan;
@@ -110,14 +111,16 @@ class Employee extends User implements Staff
         $savingPlans = (new SavingPlan())->getAllSavingPlans();
         $tblQuery = "";
         foreach ($savingPlans as $key => $value) {
-            $editRow = ($edit) ? ("<td><input type='text'/><button>Submit</button></td>") : "";
+            $id = $value['s_plan_id'];
+            $rate = $value['rate'];
+            $editRow = ($edit) ? ("<td><input name='".'in-'.$id."' id='".'in-'.$id."' style='width:50px' placeholder='Rate' type='number'/>&nbsp;&nbsp;<span class='errorr' id='".'er-'.$id."'></span>&nbsp;&nbsp;<button type='submit' name='".'btn-'.$id."' id='".'btn_save-'.$id."' class='btn btn-primary btn-xs' onclick='rate(this)'>Submit</button></td>") : "";
             $tblQuery = $tblQuery . 
             "<tr>
                 <td>".(++$key)."</td>
                 <td><b>".$value['s_plan_id']."</b></td>
                 <td>".$value['s_plan_des']."</td>
                 <td>".$value['minimum_amount']."</td>
-                <td><span class='pie'>".$value['rate']."/100</span>".$value['rate']." %</td>
+                <td><span id='". 'pie-' . $id ."' class='pie'>".$rate."/100</span><span id='". 'val-' .$id ."'>".$rate." %</span></td>
                 $editRow
             </tr>";
         }
@@ -132,14 +135,16 @@ class Employee extends User implements Staff
         $savingPlans = (new FDPlan())->getAllFDPlans();
         $tblQuery = "";
         foreach ($savingPlans as $key => $value) {
-            $editRow = ($edit) ? ("<td><input type='text'/><button>Submit</button></td>") : "";
+            $id = $value['fd_plan_id'];
+            $rate = $value['rate'];
+            $editRow = ($edit) ? ("<td><input name='".'in-'.$id."' id='".'in-'.$id."' style='width:50px' placeholder='Rate' type='number'/>&nbsp;&nbsp;<span class='errorr' id='".'er-'.$id."'></span>&nbsp;&nbsp;<button type='submit' name='".'btn-'.$id."' id='".'btn_FD-'.$id."' class='btn btn-primary btn-xs' onclick='rate(this)'>Submit</button></td>") : "";
             $tblQuery = $tblQuery . 
             "<tr>
                 <td>".(++$key)."</td>
                 <td><b>".$value['fd_plan_id']."</b></td>
                 <td>".$value["description"]."</td>
                 <td>".$value['duration_in_months']."</td>
-                <td><span class='pie'>".$value['rate']."/100</span>".$value['rate']." %</td>
+                <td><span id='". 'pie-' . $id ."' class='pie'>".$rate."/100</span><span id='". 'val-' .$id ."'>".$rate." %</span></td>
                 $editRow
             </tr>";
         }
@@ -174,8 +179,18 @@ class Employee extends User implements Staff
         $accounts = (new Account)->ViewAllAccounts();
         $tblQuery = "";
         foreach ($accounts as $account) {
-            $status = ($account["status"]) ? ("check") : ("ban");
-            $tblQuery = $tblQuery . 
+            $color = "#40BF36";
+            $ID_1 = "st-" . $account["accID"];
+            $ID_2 = "tg-" . $account["accID"];
+            $ID_3 = "ic-" . $account["accID"];
+
+            $icon = 'fa fa-toggle-on';
+            if ($account["status"] == '0') {
+                $color = '#CC2020';
+                $icon = 'fa fa-toggle-off';
+            }
+            $status = ($account["status"]) ? ("fa fa-check") : ("fa fa-ban");
+            $tblQuery = $tblQuery .
             "<tr><td></td><td>".$account["accID"]."</td>
             <td>".$account["NIC"]."</td>
             <td>".$account["branchName"]."</td>
@@ -184,7 +199,8 @@ class Employee extends User implements Staff
             <td>".$account["type"]."</td>
             <td class='datatable-ct'><span class='pie'>".$account["no_of_withdrawals"]."/5</span>
             </td>
-            <td class='datatable-ct'><i class='fa fa-$status'></i></td>
+            <td class='datatable-ct'><i id='{$ID_1}' class='{$status}'></i></td>
+            <td><button  title='Change Account Status' id='{$ID_2}' onclick='changeStatus(\"{$account['accID']}\")' style='background-color:{$color};border: 1px solid black;border-radius: 5px;' class='btn'><i id='{$ID_3}' class='{$icon}' aria-hidden='true'></i></button></td>
             <td>".$account["closed_date"]."</td></tr>";
         }
         return $tblQuery;
@@ -296,6 +312,34 @@ class Employee extends User implements Staff
         }
         return $tblQuery;
     }
+
+    /**
+     * account change status
+     */
+    public function changeStatus($Acc_ID, $Acc_status)
+    {
+        return (new Account())->changeStatus($Acc_ID,$Acc_status);
+    }
+
+    public function getLoanPlanIdsAsOptions()
+    {
+        $loanIds = (new LoanPlan())->getLoanIds();
+        $opt = "";
+        foreach ($loanIds as $loanId) {
+            $opt = $opt. "<option value='$loanId'>$loanId</option>";
+        }
+        return $opt;
+    }
+
+    /**
+     * Request A loan
+     */
+    public function requestLoan($NIC, $balance, $reason, $duInMon, $planId)
+    {
+        $newLoan = new Loan($NIC, $balance, $reason, $duInMon, $planId);
+        return $newLoan->requestLoan();
+    }
 }
+
 
 ?>

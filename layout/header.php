@@ -183,6 +183,21 @@ use Classess\Auth\Staff;
                                 <li><a title="All FD" href="../FD/AllFD.php"><span class="mini-sub-pro">All FD</span></a></li>
                             </ul>
                         </li>
+                        <li>
+                            <a class="has-arrow" href="mailbox.php" aria-expanded="false"><span class="educate-icon educate-data-table icon-wrap"></span> <span class="mini-click-non">Loan</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="Request Loan" href="../loan/requestLoan.php"><span class="mini-sub-pro">Request a Loan</span></a></li>
+                                <?php
+                                    if ($loginedUser instanceof Manager) {                    
+                                ?>
+                                <li><a title="Approved Loan" href="../loan/pendingLoan.php"><span class="mini-sub-pro">Pending Loan</span></a></li>
+                                <li><a title="Approved Loan" href="../loan/ApprovedLoan.php"><span class="mini-sub-pro">Approved Loan</span></a></li>
+                                <li><a title="Approved Loan" href="../loan/rejectedLoan.php"><span class="mini-sub-pro">Rejected Loan</span></a></li>
+                                <?php
+                                    }
+                                ?>
+                            </ul>
+                        </li>
                         <?php
                             }
                             if ($loginedUser instanceof Manager){

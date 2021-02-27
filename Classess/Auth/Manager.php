@@ -1,6 +1,7 @@
 <?php
 namespace Classess\Auth;
 use Includes\DB\Connection;
+use Includes\Loan\Loan;
 
 class Manager extends Employee
 {
@@ -216,6 +217,60 @@ class Manager extends Employee
         }
         return $content;
                    
+    }
+
+    public function ViewAllPendingLoans()
+    {
+        $loans = (new Loan())->ViewAllPendingLoans();
+        $tblQuery = "";
+        foreach ($loans as $loan) {
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$loan["loan_id"]."</td>
+            <td>".$loan["NIC"]."</td>        
+            <td> R.s ".$loan["Amount"]."</td>
+            <td>".$loan["interestPlanId"]."</td>   
+            <td>".$loan["reason"]."</td>   
+            <td>".$loan["requestedDate"]."</td>   
+            <td>".$loan["Duration_in_months"]." Months</td>
+            <td> <a href='viewPendingLoan.php?loan_id=".$loan["loan_id"]."'><u><b>Show More --><u><b> </a></td></tr>";
+        }
+        return $tblQuery;
+    }
+
+    public function ViewAllRejectedLoans()
+    {
+        $loans = (new Loan())->ViewAllRejectedLoans();
+        $tblQuery = "";
+        foreach ($loans as $loan) {
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$loan["loan_id"]."</td>
+            <td>".$loan["NIC"]."</td>        
+            <td> R.s ".$loan["Amount"]."</td>
+            <td>".$loan["interestPlanId"]."</td>   
+            <td>".$loan["reason"]."</td>   
+            <td>".$loan["requestedDate"]."</td>   
+            <td>".$loan["Duration_in_months"]." Months</td>
+            <td> <a href='viewRejectedLoan.php?loan_id=".$loan["loan_id"]."'><u><b>Show More --><u><b> </a></td></tr>";
+        }
+        return $tblQuery;
+    }
+
+    public function ViewAllApprovedLoans()
+    {
+        $loans = (new Loan())->ViewAllApprovedLoans();
+        $tblQuery = "";
+        foreach ($loans as $loan) {
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$loan["loan_id"]."</td>
+            <td>".$loan["NIC"]."</td>        
+            <td> R.s ".$loan["Amount"]."</td>
+            <td>".$loan["interestPlanId"]."</td>   
+            <td>".$loan["reason"]."</td>   
+            <td>".$loan["requestedDate"]."</td>   
+            <td>".$loan["Duration_in_months"]." Months</td>
+            <td> <a href='viewApprovedLoan.php?loan_id=".$loan["loan_id"]."'><u><b>Show More --><u><b> </a></td></tr>";
+        }
+        return $tblQuery;
     }
     
 }

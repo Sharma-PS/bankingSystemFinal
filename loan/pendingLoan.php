@@ -1,13 +1,14 @@
 <?php
 
 include("../layout/header.php");
-use Classess\Auth\Staff;
-if(!($loginedUser instanceof Staff)){
+
+use Classess\Auth\Manager;
+if(!($loginedUser instanceof Manager)){
     header("location:../error/403.php");
 }
 ?>
 <script>
-    changeTitle("View Accounts | Core Bank");
+    changeTitle("View Pending Loan | Core Bank");
 </script>
             <!-- Mobile Menu end -->
             <div class="breadcome-area">
@@ -22,7 +23,7 @@ if(!($loginedUser instanceof Staff)){
                                         <ul class="breadcome-menu">
                                             <li><a href="../home/">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Account Table</span>
+                                            <li><span class="bread-blod">Pending Loan Table</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -41,11 +42,11 @@ if(!($loginedUser instanceof Staff)){
                         <div class="sparkline13-list">
                             <div class="sparkline13-hd">
                                 <div class="main-sparkline13-hd">
-                                    <h1>View <span class="table-project-n">All</span> Accounts</h1>
-                                </div>
+                                    <h1>View <span class="table-project-n">All</span> Pending Loans</h1>
+                                </div>       
                                 <div class="add-product">
-                                <a href="addAccount.php">Add Account</a>
-                                </div>
+                                <a href="requestLoan.php">Request Loan</a>
+                                </div>                         
                             </div>
                             <div class="sparkline13-graph">
                                 <div class="datatable-dashv1-list custom-datatable-overright">
@@ -61,20 +62,18 @@ if(!($loginedUser instanceof Staff)){
                                         <thead>
                                             <tr>
                                                 <th data-field="state" data-checkbox="true"></th>
-                                                <th data-field="aid">Account ID</th>
-                                                <th data-field="nic">NIC</th>
-                                                <th data-field="branch" >Branch</th>
-                                                <th data-field="balance" >Balance</th>
-                                                <th data-field="openedDate" >OpenedDate</th>                                                
-                                                <th data-field="type">type</th>                                
-                                                <th data-field="nowd">No of Withdrawal (5)</th>                                
-                                                <th data-field="status" >status</th>  
-                                                <th data-field="setting" >setting</th>                                                
-                                                <th data-field="closedDate" >closed Date</th>                                    
+                                                <th data-field="Loan_ID">Loan_ID</th>
+                                                <th data-field="NIC">NIC</th>
+                                                <th data-field="Amount" >Amount</th>
+                                                <th data-field="I_Plan" >I_Plan-Id</th>
+                                                <th data-field="Reason" >Reason</th>                                                
+                                                <th data-field="Requested_Date">Requested_Date</th>                                
+                                                <th data-field="Duration">Duration</th>                                                                                                             
+                                                <th data-field="Show">Show More</th>                                                                                                             
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php echo $loginedUser->ViewAllAccounts() ?>                                 
+                                            <?php echo $loginedUser->ViewAllPendingLoans() ?>                                 
                                         </tbody>
                                     </table>
                                 </div>
@@ -83,7 +82,7 @@ if(!($loginedUser instanceof Staff)){
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>       
         <?php 
-            include("../layout/footer.php");
-        ?>
+include("../layout/footer.php");
+?>

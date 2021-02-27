@@ -2,6 +2,8 @@
 namespace Classess\Auth;
 use Includes\Branch\Branch;
 use Includes\DB\Connection;
+use Includes\Plans\FDPlan;
+use Includes\Plans\SavingPlan;
 
 class HeadManager extends Manager
 {
@@ -177,6 +179,16 @@ class HeadManager extends Manager
         return FAILEDINSERT; 
           
     } 
+
+    public function changeRate($id, $rate, $plan)
+    {
+        if ($plan == "btn_save") {
+            $result = (new SavingPlan())->setRate($id,$rate);
+        }elseif ($plan == "btn_FD") {
+            $result = (new FDPlan())->setRate($id,$rate);
+        }
+        return $result;
+    }
 }
 
 ?>

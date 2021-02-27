@@ -21,6 +21,27 @@ class FDPlan extends Connection
         return $this->allPlans;
     }
     
+    public function getAllSavingPlansId():array
+    {
+        $ids = array();
+        foreach ($this->allPlans as $id) {
+            array_push($ids, $id["s_plan_id"]);
+        }
+        return $ids;
+    }
+
+    public function setRate($id,$rate)
+    {
+
+        $sql = "UPDATE `fd_plan` SET `rate` = ? WHERE `fd_plan`.`fd_plan_id` = ?"; 
+        $stmt = (new Connection)->connect()->prepare($sql);
+
+        if($stmt->execute([$rate, $id])):
+            return "Sucessfully Updated.";
+        else:
+            return "Failed to Update. \n Try Again";
+        endif;    
+    }
 
 }
 

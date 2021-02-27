@@ -6,6 +6,14 @@
                                 <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
                                 <p><strong>Success!</strong> Successfully Added.</p>
                             </div>");
+    
+    define('REQUESTEDSUCCESS', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
+                            <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                                    <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+                                </button>
+                            <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
+                            <p><strong>Success!</strong> REQUESTED SEND.</p>
+                        </div>");
                             
     define('ALREADYHAVE', "<div class='alert alert-info alert-success-style2 alert-st-bg1 alert-st-bg12'>
                                 <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
@@ -193,5 +201,13 @@
                 <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
                 <p><strong>OOPS!</strong> Don't Have Saving Account!... </p>
             </div>");
+
+    define('DONTHAVEA', "<div class='alert alert-danger alert-mg-b alert-success-style4 alert-st-bg3 alert-st-bg14' style='margin-top:20px'>
+            <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                    <span class='icon-sc-cl' aria-hidden='true' style='color:red;'>&times;</span>
+                </button>
+            <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
+            <p><strong>OOPS!</strong> You are not belongs to customer!... </p>
+        </div>");
                 
 ?>

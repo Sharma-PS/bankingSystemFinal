@@ -20,6 +20,15 @@ class LoanPlan extends Connection
     {
         return $this->allPlans;
     }
+
+    public function getLoanIds()
+    {
+        $ids = array();
+        foreach ($this->allPlans as $id) {
+            array_push($ids, $id["loanPlanId"]);
+        }
+        return $ids;
+    }
     
 }
 

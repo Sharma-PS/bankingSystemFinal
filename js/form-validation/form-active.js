@@ -402,6 +402,57 @@
 				}
 			});
 
+			$(".addaccountloan").validate(
+				{					
+					rules:
+					{	
+						nic:
+						{
+							required: true
+						},
+						balance:
+						{
+							required: true
+						},
+						reason:
+						{
+							required: true						
+						},
+						durationInMonth:{
+							required: true	
+						},
+						planId:{
+							required: true	
+						}
+					},
+					messages:
+					{	
+						nic:
+						{
+							required: "NIC ID Required."
+						},
+						balance:
+						{
+							required: "Enter Amount."
+						},
+						reason:
+						{
+							required: "Please Write description for Your request."
+						},
+						durationInMonth:{
+							required: "Type Duration in Month"	
+						},
+						planId:{
+							required: "Please Select Your loan Plan ID."	
+						}
+					},					
+					
+					errorPlacement: function(error, element)
+					{
+						error.insertAfter(element.parent());
+					}
+				});
+
 	// Validation for login form
 			$(".edit-branch").validate(
 				{					

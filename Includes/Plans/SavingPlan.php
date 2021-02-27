@@ -29,6 +29,19 @@ class SavingPlan extends Connection
         }
         return $ids;
     }
+
+    public function setRate($id,$rate)
+    {
+
+        $sql = "UPDATE `saving_interest_plan` SET `rate` = ? WHERE `saving_interest_plan`.`s_plan_id` = ?"; 
+        $stmt = (new Connection)->connect()->prepare($sql);
+
+        if($stmt->execute([$rate, $id])):
+            return "Sucessfully Updated.";
+        else:
+            return "Failed to Update. \n Try Again";
+        endif;        
+    }
 }
 
 
