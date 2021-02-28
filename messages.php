@@ -31,6 +31,14 @@
                                 <p><strong>OOPS!</strong> You must add customer first!...</p>
                             </div>");
 
+    define('DONTGIVEPERMISSION', "<div class='alert alert-danger alert-mg-b alert-success-style4 alert-st-bg3 alert-st-bg14'>
+                                <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                                        <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+                                    </button>
+                                <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
+                                <p><strong>OOPS!</strong> Failed To give permission!...</p>
+                            </div>");
+
     define('SUCCESSDEPOSIT', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
                             <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
                                     <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
@@ -38,6 +46,14 @@
                             <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
                             <p><strong>Done !</strong> Successfully Deposited.</p>
                         </div>");
+
+    define('FINSIHEDTHELOAN', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
+                        <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                                <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+                            </button>
+                        <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
+                        <p><strong>Done !</strong> Loan Status Changed to finished.</p>
+                    </div>");
 
     define('SUCCESSTRANSFER', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
                         <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
@@ -119,6 +135,13 @@
         <p><strong>OOPS!</strong> Update Failed!... </p>
     </div>");
 
+    define('CANTPAY', "<div class='alert alert-danger alert-mg-b alert-success-style4 alert-st-bg3 alert-st-bg14' style='margin-top:20px'>
+        <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                <span class='icon-sc-cl' aria-hidden='true' style='color:red;'>&times;</span>
+            </button>
+        <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
+        <p><strong>OOPS!</strong> Payment Failed!... </p>
+    </div>");
 
     define('ALREADYEXIST', "<div class='alert alert-info alert-success-style2 alert-st-bg1 alert-st-bg12' style='margin-top:20px'>
                     <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
@@ -209,5 +232,37 @@
             <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
             <p><strong>OOPS!</strong> You are not belongs to customer!... </p>
         </div>");
+
+    define('GIVEPERMISSION', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
+        <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+            </button>
+        <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
+        <p><strong>Done !</strong> Loan Approved.</p>
+    </div>");
+
+    define('MOVETOPEN', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
+    <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+            <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+        </button>
+    <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
+    <p><strong>Done !</strong> Loan Move To Pending.</p>
+</div>");
+
+define('MOVETOREJ', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
+    <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+            <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+        </button>
+    <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
+    <p><strong>Done !</strong> Loan Rejected.</p>
+</div>");
+
+define('SUCCESSPAY', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
+    <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+            <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+        </button>
+    <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
+    <p><strong>Done !</strong> Successfully Paid.</p>
+</div>");
                 
 ?>

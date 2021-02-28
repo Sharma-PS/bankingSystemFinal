@@ -3,12 +3,12 @@ namespace Includes\Loan;
 use Includes\DB\Connection;
 class Loan extends Connection
 {
-    private $NIC, $balance, $reason, $duInMon, $planId, $loanId, $requestedDate, $pending, $approved, $installment, $approvedBy,$approvedDate, $nextPayDate, $endDate, $cntPay, $arrear, $status;
+    private $NIC, $balance, $reason, $duInMon, $planId, $loanId, $requestedDate, $pending, $approved, $installment, $approvedBy,$approvedDate, $nextPayDate, $endDate, $cntPay, $arrear, $status, $updateDate;
 
     /**
      * Set All properties of accounts
      */
-    public function __construct($NIC = NULL, $balance = NULL, $reason = NULL, $duInMon = NULL, $planId = NULL, $loanId = NULL, $requestedDate = NULL, $pending = NULL, $approved = NULL, $installment = NULL, $approvedBy = NULL,$approvedDate = NULL, $nextPayDate = NULL, $endDate = NULL, $cntPay = NULL, $arrear = NULL, $status = NULL)
+    public function __construct($NIC = NULL, $balance = NULL, $reason = NULL, $duInMon = NULL, $planId = NULL, $loanId = NULL, $requestedDate = NULL, $pending = NULL, $approved = NULL, $installment = NULL, $approvedBy = NULL,$approvedDate = NULL, $nextPayDate = NULL, $endDate = NULL, $cntPay = NULL, $arrear = NULL, $status = NULL, $updateDate = NULL)
     {       
         $this->NIC = $NIC;
         $this->balance = $balance;
@@ -17,6 +17,7 @@ class Loan extends Connection
         $this->planId = $planId;
         $this->loanId = $loanId;
         $this->requestedDate = $requestedDate;
+        $this->updateDate = $updateDate;
         $this->pending = $pending;
         $this->approved = $approved;
         $this->installment = $installment;
@@ -55,7 +56,7 @@ class Loan extends Connection
         }else{
             return "Details Missing";
         }
-        return "Cannot Request LOan";
+        return "Cannot Request Loan";
     }
 
     /**
@@ -67,7 +68,63 @@ class Loan extends Connection
         $stmt = (new Connection)->connect()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
-    }   
+    } 
+    
+    /**
+     * return all pending  loan details from database
+     */
+    public function getPendingLoanDetails()
+    {
+        $sql = "SELECT * FROM requestedloan WHERE loan_id = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$this->loanId]);
+        $result = $stmt->fetch();
+        if($result){
+            $this->NIC = $result["NIC"];
+            $this->balance = $result["Amount"];
+            $this->reason = $result["reason"];
+            $this->duInMon = $result["Duration_in_months"];
+            $this->planId = $result["interestPlanId"];
+            $this->requestedDate = $result["requestedDate"];
+
+            $sql2 = "SELECT rate FROM loan_plan WHERE loanPlanId = ?";
+            $stmt2 = (new Connection)->connect()->prepare($sql2);
+            $stmt2->execute([$this->planId]);
+            $result2 = $stmt2->fetch(); 
+            $rate = $result2["rate"] + 100;
+            
+            $this->installment = number_format((float)(($this->balance * $rate) / ($this->duInMon * 100)), 2, '.', '');
+        }
+        return $this;
+    }
+
+    /**
+     * return all pending  loan details from database
+     */
+    public function getApprovedLoanDetails()
+    {
+        $sql = "SELECT * FROM approvedloandetails WHERE loan_id = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$this->loanId]);
+        $result = $stmt->fetch();
+        if($result){
+            $this->NIC = $result["NIC"];
+            $this->balance = $result["Amount"];
+            $this->reason = $result["reason"];
+            $this->duInMon = $result["Duration_in_months"];
+            $this->planId = $result["interestPlanId"];
+            $this->requestedDate = $result["requestedDate"];            
+            $this->installment = $result["installment_amount"]; 
+            $this->approvedDate = $result["approvedDate"];
+            $this->approvedBy = $result["approvedBy"];
+            $this->nextPayDate = $result["nextPaymentDate"];
+            $this->endDate = $result["endDate"];
+            $this->cntPay = $result["countPayments"];
+            $this->arrear = $result["arrear"];
+            $this->status = ($result["status"]) ? "Active" : "Finished";
+        }
+        return $this;
+    }
 
     /**
      * return all rejected  loan details from database
@@ -90,6 +147,59 @@ class Loan extends Connection
         $stmt->execute();
         return $stmt->fetchAll();
     } 
+
+    public function givePermisionToLoan($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
+        $this->approvedDate = date("Y-m-d h:i:s");  
+        $this->nextPayDate =  date('Y-m-d h:i:s', strtotime("+1 months", strtotime($this->approvedDate)));      
+        $this->endDate = date('Y-m-d h:i:s', strtotime("+"."$this->duInMon"." months", strtotime($this->approvedDate)));        
+        $sql = "INSERT INTO `approvedloan` VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, '0', '0', '1')";
+        $stmt = (new Connection)->connect()->prepare($sql);        
+        if($stmt->execute([$this->loanId, $this->installment, $this->approvedBy, $this->nextPayDate, $this->endDate])){
+            return GIVEPERMISSION;
+        }
+        return DONTGIVEPERMISSION;
+    }
+
+    /**
+     * Move to pending loan
+     */
+    public function moveToPendingLoan()
+    {
+        $sql = "UPDATE `requestedloan` SET `pending` = '1' WHERE loan_id = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);        
+        if($stmt->execute([$this->loanId])){
+            return MOVETOPEN;
+        }
+        return DONTGIVEPERMISSION;
+    }
+
+    /**
+     * Move to Rejected loan
+     */
+    public function rejectLoan()
+    {
+        $sql = "UPDATE `requestedloan` SET `pending` = '0' WHERE loan_id = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);        
+        if($stmt->execute([$this->loanId])){
+            return MOVETOREJ;
+        }
+        return DONTGIVEPERMISSION;
+    }
+
+    /**
+     * Move to Rejected loan
+     */
+    public function changeStatus()
+    {
+        $sql = "UPDATE `approvedloan` SET `status` = '0' WHERE loan_id = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);        
+        if($stmt->execute([$this->loanId])){
+            return FINSIHEDTHELOAN;
+        }
+        return DONTGIVEPERMISSION;
+    }
 
     /**
      * Get the value of NIC
@@ -217,6 +327,34 @@ class Loan extends Connection
     public function getArrear()
     {
         return $this->arrear;
+    }
+
+    /**
+     * Set the value of loanId
+     *
+     * @return  self
+     */ 
+    public function setLoanId($loanId)
+    {
+        $this->loanId = $loanId;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of updateDate
+     */ 
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
+    }
+
+    /**
+     * Get the value of balance
+     */ 
+    public function getBalance()
+    {
+        return $this->balance;
     }
 }
 

@@ -2,6 +2,7 @@
 namespace Classess\Auth;
 use Includes\DB\Connection;
 use Includes\Loan\Loan;
+use Includes\Report\MonthlyReport;
 
 class Manager extends Employee
 {
@@ -269,6 +270,38 @@ class Manager extends Employee
             <td>".$loan["requestedDate"]."</td>   
             <td>".$loan["Duration_in_months"]." Months</td>
             <td> <a href='viewApprovedLoan.php?loan_id=".$loan["loan_id"]."'><u><b>Show More --><u><b> </a></td></tr>";
+        }
+        return $tblQuery;
+    }
+
+    /**
+     * Show pending Loan
+     */
+    public function showPendingLoan($loanId)
+    {
+        $loan = (new Loan())->setLoanId($loanId);
+        return $loan->getPendingLoanDetails();
+    }
+
+    public function getApprovedLoanDetails($loanId)
+    {
+        $loan = (new Loan())->setLoanId($loanId);
+        return $loan->getApprovedLoanDetails();
+    }
+
+    /**
+     * View All Monthly Report
+     */
+    public function ViewMonthlyReport()
+    {
+        $m_reports = (new MonthlyReport())->getAllMonthlyReportBranch($this->getBrachCode());
+        $tblQuery = "";
+        foreach ($m_reports as $m_report) {
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$m_report["id"]."</td>
+            <td>".$m_report["startDate"]."</td>                   
+            <td>".$m_report["endDate"]."</td>                            
+            <td> <a href='viewMonthlyReport.php?id=".$m_report["id"]."'><u><b>Show More --><u><b> </a></td></tr>";
         }
         return $tblQuery;
     }

@@ -402,6 +402,38 @@
 				}
 			});
 
+				// Validation for login form
+		$(".addpayment").validate(
+			{					
+				rules:
+				{	
+					loanID:
+					{
+						required: true
+					},
+					payment:
+					{
+						required: true
+					}
+				},
+				messages:
+				{	
+					loanID:
+					{
+						required: "Please type Loan ID here.."
+					},
+					payment:
+					{
+						required: "Please type Amount you pay."
+					}
+				},					
+				
+				errorPlacement: function(error, element)
+				{
+					error.insertAfter(element.parent());
+				}
+			});
+
 			$(".addaccountloan").validate(
 				{					
 					rules:

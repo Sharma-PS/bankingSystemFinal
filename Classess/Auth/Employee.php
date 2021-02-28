@@ -4,6 +4,7 @@ namespace Classess\Auth;
 use Includes\DB\Connection;
 use Classess\Account\Account;
 use Includes\FD\FD;
+use Includes\Installment\Installment;
 use Includes\Loan\Loan;
 use Includes\Plans\FDPlan;
 use Includes\Plans\SavingPlan;
@@ -338,6 +339,32 @@ class Employee extends User implements Staff
     {
         $newLoan = new Loan($NIC, $balance, $reason, $duInMon, $planId);
         return $newLoan->requestLoan();
+    }
+
+    /**
+     * Make Installment Payment
+     */
+    public function makePayment($loanId, $amount)
+    {
+        return (new Installment())->makePayment($loanId, $amount);
+    }
+
+    /**
+     * View ALl Payments
+     */
+    public function ViewAllPayments()
+    {
+        $payments = (new Installment())->getAllInstallments();
+        $tblQuery = "";
+        foreach ($payments as $payment) {            
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$payment["installment_ID"]."</td>
+            <td>".$payment["loan_id"]."</td>
+            <td> R.s ".$payment["amount"]."</td>
+            <td> ".$payment["paid_time"]."</td>
+            </tr>";
+        }
+        return $tblQuery;
     }
 }
 

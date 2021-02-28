@@ -198,6 +198,7 @@ use Classess\Auth\Staff;
                                 ?>
                             </ul>
                         </li>
+                        <li><a href="../installment/installmentPayment.php"><span class="educate-icon educate-form icon-wrap"></span> <span class="mini-click-non">Payments</span></a></li>
                         <?php
                             }
                             if ($loginedUser instanceof Manager){
@@ -208,7 +209,14 @@ use Classess\Auth\Staff;
                                 <li><a title="All Staff" href="../manager/all-staff.php"><span class="mini-sub-pro">All Staffs</span></a></li>
                                 <li><a title="Add Staff" href="../manager/add-staff.php"><span class="mini-sub-pro">Add Staff</span></a></li>                               
                             </ul>
-                        </li>
+                        </li> 
+                        <li>
+                            <a class="has-arrow" href="all-professors.php" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Reports</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="All Staff" href="../report/monthly Report.php"><span class="mini-sub-pro">Monthly Report</span></a></li>
+                                <li><a title="Add Staff" href="../report/annual Report.php"><span class="mini-sub-pro">Annual Report</span></a></li>                               
+                            </ul>
+                        </li>                        
 
                         <?php
                             }
@@ -358,21 +366,8 @@ use Classess\Auth\Staff;
                                         <div class="header-top-menu tabl-d-n">
                                             <ul class="nav navbar-nav mai-top-nav">
                                                 <li class="nav-item"><a href="#" class="nav-link">Home</a>
-                                                </li>
-                                                <li class="nav-item"><a href="#" class="nav-link">About</a>
-                                                </li>
-                                                <li class="nav-item"><a href="#" class="nav-link">Services</a>
-                                                </li>
-                                                <li class="nav-item dropdown res-dis-nn">
-                                                    <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Project <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
-                                                    <div role="menu" class="dropdown-menu animated zoomIn">
-                                                        <a href="#" class="dropdown-item">Documentation</a>
-                                                        <a href="#" class="dropdown-item">Expert Backend</a>
-                                                        <a href="#" class="dropdown-item">Expert FrontEnd</a>
-                                                        <a href="#" class="dropdown-item">Contact Support</a>
-                                                    </div>
-                                                </li>
-                                                <li class="nav-item"><a href="#" class="nav-link">Support</a>
+                                                </li>                                                                    
+                                                <li class="nav-item"><a href="#" class="nav-link">Complain</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -398,43 +393,7 @@ use Classess\Auth\Staff;
                                                                         <p>Please done this project as soon possible.</p>
                                                                     </div>
                                                                 </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                    <div class="message-img">
-                                                                        <img src="../img/contact/4.jpg" alt="">
-                                                                    </div>
-                                                                    <div class="message-content">
-                                                                        <span class="message-date">16 Sept</span>
-                                                                        <h2>Sulaiman din</h2>
-                                                                        <p>Please done this project as soon possible.</p>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                    <div class="message-img">
-                                                                        <img src="../img/contact/3.jpg" alt="">
-                                                                    </div>
-                                                                    <div class="message-content">
-                                                                        <span class="message-date">16 Sept</span>
-                                                                        <h2>Victor Jara</h2>
-                                                                        <p>Please done this project as soon possible.</p>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                    <div class="message-img">
-                                                                        <img src="../img/contact/2.jpg" alt="">
-                                                                    </div>
-                                                                    <div class="message-content">
-                                                                        <span class="message-date">16 Sept</span>
-                                                                        <h2>Victor Jara</h2>
-                                                                        <p>Please done this project as soon possible.</p>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
+                                                            </li>                                                                                                                                                                    
                                                         </ul>
                                                         <div class="message-view">
                                                             <a href="#">View All Messages</a>
@@ -458,46 +417,10 @@ use Classess\Auth\Staff;
                                                                         <p>Please done this project as soon possible.</p>
                                                                     </div>
                                                                 </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                    <div class="notification-icon">
-                                                                        <i class="fa fa-cloud edu-cloud-computing-down" aria-hidden="true"></i>
-                                                                    </div>
-                                                                    <div class="notification-content">
-                                                                        <span class="notification-date">16 Sept</span>
-                                                                        <h2>Sulaiman din</h2>
-                                                                        <p>Please done this project as soon possible.</p>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                    <div class="notification-icon">
-                                                                        <i class="fa fa-eraser edu-shield" aria-hidden="true"></i>
-                                                                    </div>
-                                                                    <div class="notification-content">
-                                                                        <span class="notification-date">16 Sept</span>
-                                                                        <h2>Victor Jara</h2>
-                                                                        <p>Please done this project as soon possible.</p>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                    <div class="notification-icon">
-                                                                        <i class="fa fa-line-chart edu-analytics-arrow" aria-hidden="true"></i>
-                                                                    </div>
-                                                                    <div class="notification-content">
-                                                                        <span class="notification-date">16 Sept</span>
-                                                                        <h2>Victor Jara</h2>
-                                                                        <p>Please done this project as soon possible.</p>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
+                                                            </li>                                                                                                                   
                                                         </ul>
                                                         <div class="notification-view">
-                                                            <a href="#">View All Notification</a>
+                                                            <a href="#">View All Pending Loan</a>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -507,14 +430,10 @@ use Classess\Auth\Staff;
 															<span class="admin-name"><?php echo $loginedUser->getFname(); ?></span>
 															<i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
 														</a>
-                                                    <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">
-                                                        <li><a href="#"><span class="edu-icon edu-home-admin author-log-ic"></span>My Account</a>
-                                                        </li>
+                                                    <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">                                                        
                                                         <li><a href="#"><span class="edu-icon edu-user-rounded author-log-ic"></span>My Profile</a>
-                                                        </li>
-                                                        <li><a href="#"><span class="edu-icon edu-money author-log-ic"></span>User Billing</a>
-                                                        </li>
-                                                        <li><a href="#"><span class="edu-icon edu-settings author-log-ic"></span>Settings</a>
+                                                        </li>                                                        
+                                                        <li><a href="#"><span class="edu-icon edu-settings author-log-ic"></span>Change Password</a>
                                                         </li>
                                                         <li><a href="../logout.php"><span class="edu-icon edu-locked author-log-ic"></span>Log Out</a>
                                                         </li>
