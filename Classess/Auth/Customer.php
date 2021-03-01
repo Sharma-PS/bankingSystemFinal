@@ -46,6 +46,28 @@ class Customer extends User
         }
 
     /**
+     * Register customer
+     */
+    public function register($password){
+        $filenm=$this->getDp();
+        if ($filenm != NULL) {
+            $upload_dir = "../img/profile/";
+            $uploaded_file = $upload_dir.$filenm; 
+            move_uploaded_file($_FILES['dp']['tmp_name'],$uploaded_file);
+        }
+        
+        $sql = "INSERT INTO `customer` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $result=$stmt->execute([$this->getNIC(), $this->getFname(), $this->getMail(), $password, $this->getmobileNo(), $this->getTempAddress(), $this->getAddress(), $this->getJob(), $this->getOfficialAddress(), $this->getDOB(),$filenm, $this->getOpenedBy(), $this->getBrachCode()]);
+        if ($result){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    /**
      * Get the value of tempAddress
      */ 
     public function getTempAddress():string

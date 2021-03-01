@@ -161,6 +161,13 @@ use Classess\Auth\Staff;
                             </ul>
                         </li>
                         <li>
+                            <a class="has-arrow" href="all-courses.php" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Customer</span></a>
+                            <ul class="submenu-angle" aria-expanded="false">
+                                <li><a title="View All Account" href="../employee/all-customers.php"><span class="mini-sub-pro">All Customer</span></a></li>
+                                <li><a title="Add account" href="../employee/add-customer.php"><span class="mini-sub-pro">Add Customer</span></a></li>                                
+                            </ul>
+                        </li>
+                        <li>
                             <a class="has-arrow" href="mailbox.php" aria-expanded="false"><span class="educate-icon educate-interface icon-wrap"></span> <span class="mini-click-non">Transacation</span></a>
                             <ul class="submenu-angle interface-mini-nb-dp" aria-expanded="false">                                
                                 <li><a title="Depositr" href="../Transaction/deposit.php"><span class="mini-sub-pro">Deposit</span></a></li>
@@ -375,7 +382,7 @@ use Classess\Auth\Staff;
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                         <div class="header-right-info">
                                             <ul class="nav navbar-nav mai-top-nav header-right-menu">
-                                                <li class="nav-item dropdown">
+                                                <!--li class="nav-item dropdown">
                                                     <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><i class="educate-icon educate-message edu-chat-pro" aria-hidden="true"></i><span class="indicator-ms"></span></a>
                                                     <div role="menu" class="author-message-top dropdown-menu animated zoomIn">
                                                         <div class="message-single-top">
@@ -423,7 +430,7 @@ use Classess\Auth\Staff;
                                                             <a href="#">View All Pending Loan</a>
                                                         </div>
                                                     </div>
-                                                </li>
+                                                </li-->
                                                 <li class="nav-item">
                                                     <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
 															<img src="../<?php echo $loginedUser->getDp()?>" alt="" />

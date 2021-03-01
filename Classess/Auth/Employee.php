@@ -366,6 +366,37 @@ class Employee extends User implements Staff
         }
         return $tblQuery;
     }
+
+
+    public function showCustomers(){
+        $sql = "SELECT * FROM Customer";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        return $result;
+    }
+
+    public function showCustomer($nic){
+        $sql="SELECT * FROM Customer WHERE NIC='".$nic."'";
+        $stmt=(new Connection)->connect()->prepare($sql);
+        $stmt->execute();
+        $customer = $stmt->fetchAll();
+        if (!$customer){
+            return "No Customer";
+        }
+        $_SESSION['search']=$customer[0];
+        return $customer[0];
+    }
+
+    public function editCustomer($customer,$updatedDate){
+        $result=$customer->edit($updatedDate);
+        if ($result){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
 
 
