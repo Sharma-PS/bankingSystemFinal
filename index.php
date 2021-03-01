@@ -1,15 +1,16 @@
-<!doctype html>
+
 <?php
-use Classess\Auth\Customer;
-use Classess\Auth\User;
 ob_start();
 session_start();
-require 'autoloader.php';
-$loginUser = @unserialize($_SESSION['core_bank_user']);
-if ($loginUser instanceof User) {
-  header("location:home/");
+include 'autoloader.php';
+use Classess\Auth\Customer;
+use Classess\Auth\User;
+$loginedUser = @unserialize($_SESSION['core_bank_user']);
+if ($loginedUser instanceof User) {
+    header("location:home/");
 }
 ?>
+<!doctype html>
 <html class="no-js" lang="en">
 
 <head>

@@ -2,7 +2,7 @@
 namespace Classess\Auth;
 
 require 'autoloader.php';
-require '../messages.php';
+include '../messages.php';
 use Includes\DB\Connection;
 
 abstract class User extends Connection{

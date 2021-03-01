@@ -2,6 +2,7 @@
 namespace Classess\Auth;
 use Includes\DB\Connection;
 use Includes\Loan\Loan;
+use Includes\Report\AnnualReport;
 use Includes\Report\MonthlyReport;
 
 class Manager extends Employee
@@ -304,6 +305,35 @@ class Manager extends Employee
             <td> <a href='viewMonthlyReport.php?id=".$m_report["id"]."'><u><b>Show More --><u><b> </a></td></tr>";
         }
         return $tblQuery;
+    }
+
+    /**
+     * View All Annual Report
+     */
+    public function ViewAnnualReport()
+    {
+        $m_reports = (new AnnualReport())->getAllAnnualReportBranch($this->getBrachCode());
+        $tblQuery = "";
+        foreach ($m_reports as $m_report) {
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$m_report["id"]."</td>
+            <td>".$m_report["year"]."</td>                                                    
+            <td> <a href='viewAnnuallyReport.php?id=".$m_report["id"]."'><u><b>Show More --><u><b> </a></td></tr>";
+        }
+        return $tblQuery;
+    }
+    
+    /**
+     * Get monthly Report
+     */
+    public function getMonthlyReport($id)
+    {
+        return (new MonthlyReport())->getMonthlyReport($id, $this->getBrachCode());
+    }
+
+    public function getAnnualReport($id)
+    {
+        return (new AnnualReport())->getAnnualReport($id, $this->getBrachCode());
     }
     
 }

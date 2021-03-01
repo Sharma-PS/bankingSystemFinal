@@ -39,6 +39,39 @@ class MonthlyReport extends Connection
         $stmt->execute([$brc]);
         return $stmt->fetchAll();
     }
+
+    /**
+     * Monthly Report Get
+     */
+    public function getMonthlyReport($id, $brc)
+    {
+        $sql = "SELECT * FROM `monthly_report` WHERE id = ? AND branchCode = ? ";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$id, $brc]);
+        $result = $stmt->fetch();
+        if($result){
+            $this->id = $result["id"];
+            $this->startDate = $result["startDate"];
+            $this->endDate = $result["endDate"];
+            $this->totalDeposit = $result["totalDeposit"];
+            $this->totDepAmo = $result["total_deposit_amount"];
+            $this->totW = $result["totalWithdrawal"];
+            $this->totWA = $result["total_withdrawal_amount"];
+            $this->totTra = $result["total transaction"];
+            $this->totTraAmo = $result["total_transaction_amount"];
+            $this->activCus = $result["total_active_customer"];
+            $this->actEmp = $result["total_active_employee"];
+            $this->actFd = $result["no_active_FD"];
+            $this->actFDamo = $result["active_FD_amount"];
+            $this->actLoan = $result["no_active_loan"];
+            $this->actLoanAmo = $result["active_loan_amount"];
+            $this->penIns = $result["no_pending_installments"];
+            $this->branchCode = $result["branchCode"];
+            $this->generatedOn = $result["generated_on"];
+            return $this;
+        }
+        return "Failed";
+    }
        
 
     /**

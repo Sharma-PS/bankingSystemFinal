@@ -22,7 +22,7 @@ if(!($loginedUser instanceof Manager)){
                                         <ul class="breadcome-menu">
                                             <li><a href="../home/">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Installment Table</span>
+                                            <li><span class="bread-blod">Monthly Report Table</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -41,10 +41,10 @@ if(!($loginedUser instanceof Manager)){
                         <div class="sparkline13-list">
                             <div class="sparkline13-hd">
                                 <div class="main-sparkline13-hd">
-                                    <h1>View <span class="table-project-n">All</span> Installments</h1>
+                                    <h1>View <span class="table-project-n"> All</span> Monthly Reports</h1>
                                 </div>
                                 <div class="add-product">
-                                <a href="installmentPayment.php">Go to Payment</a>
+                                <a href="annual Report.php">Go to Annual Report</a>
                                 </div>
                             </div>
                             <div class="sparkline13-graph">
