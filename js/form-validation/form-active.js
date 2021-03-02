@@ -434,6 +434,45 @@
 				}
 			});
 
+			$(".addpaymentAcc").validate(
+				{					
+					rules:
+					{	
+						loanID:
+						{
+							required: true
+						},
+						payment:
+						{
+							required: true
+						},
+						FaccID:
+						{
+							required : true
+						}						
+					},
+					messages:
+					{	
+						loanID:
+						{
+							required: "Please type Loan ID here.."
+						},
+						payment:
+						{
+							required: "Please type Amount you pay."
+						},						
+						FaccID:
+						{
+							required : "Select Your Account."
+						}	
+					},					
+					
+					errorPlacement: function(error, element)
+					{
+						error.insertAfter(element.parent());
+					}
+				});
+
 			$(".addaccountloan").validate(
 				{					
 					rules:

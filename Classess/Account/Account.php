@@ -1,9 +1,11 @@
 <?php
 namespace Classess\Account;
 use Includes\DB\Connection;
+use Includes\FD\FD;
+
 class Account extends Connection
 {
-    private $accID, $NIC, $branch, $balance, $type;
+    private $accID, $NIC, $branch, $balance, $type, $createdDate, $updatedDate;
 
     /**
      * Set All properties of accounts
@@ -82,6 +84,140 @@ class Account extends Connection
             return "Failed to Update. \n Try Again";
         endif;
 
+    }
+
+    /**
+     * Get One account of Customer
+     */
+    public function getAccount($nic)
+    {
+        $sql = "SELECT * FROM account WHERE NIC = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$nic]);
+        $results = $stmt->fetchAll();
+        if($results){
+            $accounts = array();
+            foreach ($results as $result) {
+               $acc = new Account($result["accID"], $nic, $result["branchCode"],$result["balance"],  $result["type"]);
+               $acc->setCreatedDate($result["createdDate"]);
+               $acc->setUpdatedDate($result["updatedDate"]);
+               array_push($accounts, $acc);
+            }  
+            return $accounts;                                                                                              
+        }
+        return DONTHAVEA;        
+    }
+
+    public function hasFD($nic)
+    {
+        $sql = "SELECT a.accID,f.amount FROM account a INNER JOIN fd f WHERE a.accID = f.savingAcc_id AND a.NIC = ? AND a.type = ? AND f.maturityDate > NOW() ORDER BY f.amount DESC LIMIT 1";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$nic,"saving"]);
+        $result = $stmt->fetch();
+        if($result){           
+            return new FD(NULL, $result["accID"], $result["amount"]);
+        }
+        return FDREQUIRED;
+    }
+
+    /**
+     * Check Enough Money
+     */
+    public function hasEnoghMoney($amount)
+    {
+        $sql = "SELECT balance FROM account WHERE accID = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$this->accID]);
+        $results = $stmt->fetch();
+        if($results["balance"] > $amount){
+            return "TRUE";
+        }
+        return "FALSE";
+    }
+
+    /**
+     * Acc Ids
+     */
+    public function getAccIdAsOptions($nic)
+    {
+        $sql = "SELECT accID FROM account WHERE NIC = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$nic]);
+        return $stmt->fetchAll();
+    }
+
+
+    /**
+     * Get the value of accID
+     */ 
+    public function getAccID()
+    {
+        return $this->accID;
+    }
+
+    /**
+     * Get the value of NIC
+     */ 
+    public function getNIC()
+    {
+        return $this->NIC;
+    }
+
+    /**
+     * Get the value of branch
+     */ 
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    /**
+     * Get the value of balance
+     */ 
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * Get the value of type
+     */ 
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get the value of createdDate
+     */ 
+    public function getCreatedDate()
+    {
+        return $this->createdDate;
+    }
+
+    /**
+     * Get the value of updatedDate
+     */ 
+    public function getUpdatedDate()
+    {
+        return $this->updatedDate;
+    }
+
+    /**
+     * Set the value of createdDate
+     *
+     */ 
+    public function setCreatedDate($createdDate)
+    {
+        $this->createdDate = $createdDate;        
+    }
+
+    /**
+     * Set the value of updatedDate
+     */ 
+    public function setUpdatedDate($updatedDate)
+    {
+        $this->updatedDate = $updatedDate;
     }
 }
 

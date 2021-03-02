@@ -291,6 +291,29 @@ class Manager extends Employee
     }
 
     /**
+     * Get Late loan as table
+     */
+    public function ViewLateLoanReport()
+    {
+        $m_reports = (new Loan())->ViewLateLoanReport($this->getBrachCode());
+        $tblQuery = "";
+        foreach ($m_reports as $m_report) {
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$m_report["loan_id"]."</td>                                                             
+            <td> R.s ".$m_report["Amount"]."</td>                            
+            <td> R.s ".$m_report["installment_amount"]."</td>                    
+            <td>".$m_report["reason"]."</td>          
+            <td>".$m_report["nextPaymentDate"]."</td>                                        
+            <td>".$m_report["NIC"]."</td>                           
+            <td>".$m_report["name"]."</td>                            
+            <td>".$m_report["eMail"]."</td>                            
+            <td>".$m_report["mobileNo"]."</td>                            
+            </tr>";           
+        }
+        return $tblQuery;
+    }
+
+    /**
      * View All Monthly Report
      */
     public function ViewMonthlyReport()

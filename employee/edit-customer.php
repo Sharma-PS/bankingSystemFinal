@@ -132,7 +132,7 @@
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="payment-adress">
-                                                                    <button type="submit" name="edit" class="btn btn-primary waves-effect waves-light">Save</button>
+                                                                    <!--button type="submit" name="edit" class="btn btn-primary waves-effect waves-light">Save</button-->
                                                                 </div>
                                                             </div>
                                                         </div>

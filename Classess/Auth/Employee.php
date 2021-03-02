@@ -320,17 +320,7 @@ class Employee extends User implements Staff
     public function changeStatus($Acc_ID, $Acc_status)
     {
         return (new Account())->changeStatus($Acc_ID,$Acc_status);
-    }
-
-    public function getLoanPlanIdsAsOptions()
-    {
-        $loanIds = (new LoanPlan())->getLoanIds();
-        $opt = "";
-        foreach ($loanIds as $loanId) {
-            $opt = $opt. "<option value='$loanId'>$loanId</option>";
-        }
-        return $opt;
-    }
+    }    
 
     /**
      * Request A loan
@@ -347,6 +337,35 @@ class Employee extends User implements Staff
     public function makePayment($loanId, $amount)
     {
         return (new Installment())->makePayment($loanId, $amount);
+    }
+
+    /**
+     * Check Pass
+     */
+    public function checkPass($oldPass)
+    {
+        $sql = "SELECT * FROM employee WHERE email = ? AND password = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$this->getMail(), $oldPass]);
+        $result = $stmt->fetchAll();
+        if ($result) {
+            return "TRUE";
+        }
+        return "FALSE";
+    }
+
+    /**
+     * change PAss
+     */
+
+    public function changePass($pass)
+    {
+        $sql = "UPDATE `employee` SET `password` = ? WHERE email = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);       
+        if ($stmt->execute([$pass, $this->getMail()])) {
+            return CHANGPASS;
+        }
+        return "FAILED";
     }
 
     /**

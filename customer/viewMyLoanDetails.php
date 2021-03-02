@@ -2,24 +2,21 @@
             <?php
             include("../layout/header.php");
 
-            use Classess\Auth\Manager;
+            use Classess\Auth\Customer;
 
-                if(!($loginedUser instanceof Manager)){
+
+                if(!($loginedUser instanceof Customer)){
                     header("location:../error/403.php");
                 }
                 if(isset($_GET['loan_id'])){                
                     $B_code = $_GET['loan_id'];
-                    $detail = $loginedUser->getApprovedLoanDetails($B_code);            
+                    $detail = $loginedUser->myLoanDeatails($B_code);            
                 }else{
                     header("location:../error/404.php");
-                }
-
-                if(isset($_POST['finishedLoan'])){                                
-                    $msg = $detail->changeStatus() ;            
-                }
+                }              
             ?>
 <script>
-    changeTitle("View Rejected Loan | Core Bank");
+    changeTitle("My Loan Details | Core Bank");
 </script>
             <div class="breadcome-area">
                 <div class="container-fluid">
@@ -35,7 +32,7 @@
                                         <ul class="breadcome-menu">
                                             <li><a href="../home/">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Approved Loan Details</span>
+                                            <li><span class="bread-blod">Loan Details</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -46,6 +43,7 @@
                 </div>
             </div>
         </div>
+        <!-- Single pro tab review Start-->
         <!-- Single pro tab review Start-->
         <div class="single-pro-review-area mt-t-30 mg-b-15">
             <div class="container-fluid">
@@ -145,11 +143,7 @@
                                         <div class="address-hr tb-sm-res-d-n dps-tb-ntn">
                                             <p><b>Status</b><br /><?php echo $detail->getStatus()?></p>
                                         </div>
-                                    </div>
-                                    <form class="address-hr " method="POST" action="#">
-                                        <input type="submit" value="Finsh The Loan" name="finishedLoan"  class="btn btn-primary waves-effect waves-light">
-                                    </form>
-                                    <?php echo @$msg; ?>
+                                    </div>                                                        
                                 </div>                                
                             </div>
                         </div>

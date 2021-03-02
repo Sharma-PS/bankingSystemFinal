@@ -4,6 +4,7 @@ namespace Classess\Auth;
 require 'autoloader.php';
 include '../messages.php';
 use Includes\DB\Connection;
+use Includes\Plans\LoanPlan;
 
 abstract class User extends Connection{
 
@@ -32,6 +33,18 @@ abstract class User extends Connection{
         session_destroy();
         header("location:index.php");
     }
+
+    public function getLoanPlanIdsAsOptions()
+    {
+        $loanIds = (new LoanPlan())->getLoanIds();
+        $opt = "";
+        foreach ($loanIds as $loanId) {
+            $opt = $opt. "<option value='$loanId'>$loanId</option>";
+        }
+        return $opt;
+    }
+
+    
 
     public static abstract function login($uname, $pass): string;
 

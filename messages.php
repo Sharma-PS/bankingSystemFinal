@@ -46,6 +46,14 @@
                             <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
                             <p><strong>Done !</strong> Successfully Deposited.</p>
                         </div>");
+    
+    define('CHANGPASS', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
+                        <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                                <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+                            </button>
+                        <i class='fa fa-check edu-checked-pro admin-check-pro admin-check-pro-clr admin-check-pro-clr11' aria-hidden='true'></i>
+                        <p><strong>Done !</strong> Password Changed.</p>
+                    </div>");                        
 
     define('FINSIHEDTHELOAN', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
                         <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
@@ -109,7 +117,15 @@
                             </button>
                         <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
                         <p><strong>OOPS!</strong> Not Enough Money!...</p>
-                    </div>");   
+                    </div>");  
+                    
+    define('FDREQUIRED', "<div class='alert alert-danger alert-mg-b alert-success-style4 alert-st-bg3 alert-st-bg14'>
+                    <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                            <span class='icon-sc-cl' aria-hidden='true'>&times;</span>
+                        </button>
+                    <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
+                    <p><strong>OOPS!</strong> You must have Fixed Deposit!...</p>
+                </div>"); 
     
     define('REACHEDMAXWITHDRAWAL', "<div class='alert alert-info alert-success-style2 alert-st-bg1 alert-st-bg12'>
                     <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
@@ -232,6 +248,22 @@
             <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
             <p><strong>OOPS!</strong> You are not belongs to customer!... </p>
         </div>");
+
+    define('FDUPPER', "<div class='alert alert-danger alert-mg-b alert-success-style4 alert-st-bg3 alert-st-bg14' style='margin-top:20px'>
+        <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                <span class='icon-sc-cl' aria-hidden='true' style='color:red;'>&times;</span>
+            </button>
+        <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
+        <p><strong>OOPS!</strong> Your can only ask Atmost Loan Plans Maximum amount!... </p>
+    </div>");
+
+    define('SIXTYPERREQ', "<div class='alert alert-danger alert-mg-b alert-success-style4 alert-st-bg3 alert-st-bg14' style='margin-top:20px'>
+        <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>
+                <span class='icon-sc-cl' aria-hidden='true' style='color:red;'>&times;</span>
+            </button>
+        <i class='fa fa-times edu-danger-error admin-check-pro admin-check-pro-clr3 admin-check-pro-clr14' aria-hidden='true'></i>
+        <p><strong>OOPS!</strong> Your can only ask Atmost Loan Plans 60% Your FD! </p>
+    </div>");
 
     define('GIVEPERMISSION', "<div class='alert alert-success alert-success-style1 alert-st-bg alert-st-bg11'>
         <button type='button' class='close sucess-op' data-dismiss='alert' aria-label='Close'>

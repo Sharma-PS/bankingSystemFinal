@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 19, 2021 at 04:17 AM
+-- Generation Time: Mar 02, 2021 at 12:21 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -95,6 +95,144 @@ BEGIN
 
 END$$
 
+DROP PROCEDURE IF EXISTS `generateAnnuallyReport`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generateAnnuallyReport` (IN `brC` VARCHAR(50))  NO SQL
+BEGIN
+	DECLARE startDte DATETIME;
+    DECLARE endDte DATETIME;
+    DECLARE totalDepo INTEGER;
+    DECLARE totalWD INTEGER;
+    DECLARE totalTra INTEGER;
+    DECLARE t_a_cus INTEGER;
+    DECLARE t_a_emp INTEGER;
+    DECLARE no_a_FD INTEGER;
+    DECLARE no_a_loan INTEGER;
+    DECLARE no_p_ins INTEGER;
+    DECLARE t_d_a DECIMAL(30,2);
+    DECLARE t_w_a DECIMAL(30,2);
+    DECLARE t_t_a DECIMAL(30,2);
+    DECLARE t_fd_a DECIMAL(30,2);
+    DECLARE t_lo_a DECIMAL(30,2);
+
+	SET endDte = NOW();
+    SET startDte = DATE_ADD(endDte, INTERVAL -1 YEAR);
+    
+    SELECT COUNT(deposit_id), SUM(amount) INTO totalDepo, t_d_a FROM deposit WHERE branchCode = brC AND time BETWEEN startDte AND endDte;
+    
+    SELECT COUNT(withdrawal_id ), SUM(amount) INTO totalWD, t_w_a FROM withdrawal WHERE branchCode = brC AND time BETWEEN startDte AND endDte;
+    
+    SELECT COUNT(transaction_id), SUM(amount) INTO totalTra, t_t_a FROM transaction WHERE time BETWEEN startDte AND endDte;
+    
+    SELECT COUNT(NIC) INTO t_a_cus FROM customer WHERE openedBranch = brC AND leftDate IS NULL;
+    
+    SELECT COUNT(ID) INTO t_a_emp FROM employee WHERE branchCode = brC AND leftDate IS NULL;
+    
+    SELECT COUNT(f.FD_ID),SUM(amount) INTO no_a_FD, t_fd_a FROM fd f INNER JOIN account a WHERE f.maturityDate >= endDte AND f.savingAcc_id = a.accID AND a.branchCode = brC; 
+    
+    SELECT COUNT(loan_id), SUM(Amount) INTO no_a_loan, t_lo_a FROM approvedloandetails WHERE endDate >= NOW();
+    
+    SELECT COUNT(installment_ID) INTO no_p_ins FROM `installment` WHERE paid_time BETWEEN startDte AND endDte;
+    
+    INSERT INTO annual_report VALUES(NULL, YEAR(startDte), totalDepo, t_d_a, totalWD, t_w_a, totalTra, t_t_a, t_a_cus, t_a_emp, no_a_FD, t_fd_a, no_a_loan, t_lo_a, no_p_ins, brC, CURRENT_TIMESTAMP);
+    
+END$$
+
+DROP PROCEDURE IF EXISTS `generateAnnuallyReportBranchwise`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generateAnnuallyReportBranchwise` ()  NO SQL
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+    DECLARE BraCd VARCHAR(50);
+	DEClARE brc 
+		CURSOR FOR 
+			SELECT branchCode FROM branch;
+
+	-- declare NOT FOUND handler
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+
+	OPEN brc;
+
+	getBrc: LOOP
+		FETCH brc INTO BraCd;
+		IF finished = 1 THEN 
+			LEAVE getBrc;
+		END IF;
+        CALL `generateAnnuallyReport`(BraCd);     
+	END LOOP getBrc;
+    
+	CLOSE brc;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `generateMonthlyReport`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generateMonthlyReport` (IN `brC` VARCHAR(50))  NO SQL
+BEGIN
+	DECLARE startDte DATETIME;
+    DECLARE endDte DATETIME;
+    DECLARE totalDepo INTEGER;
+    DECLARE totalWD INTEGER;
+    DECLARE totalTra INTEGER;
+    DECLARE t_a_cus INTEGER;
+    DECLARE t_a_emp INTEGER;
+    DECLARE no_a_FD INTEGER;
+    DECLARE no_a_loan INTEGER;
+    DECLARE no_p_ins INTEGER;
+    DECLARE t_d_a DECIMAL(30,2);
+    DECLARE t_w_a DECIMAL(30,2);
+    DECLARE t_t_a DECIMAL(30,2);
+    DECLARE t_fd_a DECIMAL(30,2);
+    DECLARE t_lo_a DECIMAL(30,2);
+
+	SET endDte = NOW();
+    SET startDte = DATE_ADD(endDte, INTERVAL -1 MONTH);
+    
+    SELECT COUNT(deposit_id), SUM(amount) INTO totalDepo, t_d_a FROM deposit WHERE branchCode = brC AND time BETWEEN startDte AND endDte;
+    
+    SELECT COUNT(withdrawal_id ), SUM(amount) INTO totalWD, t_w_a FROM withdrawal WHERE branchCode = brC AND time BETWEEN startDte AND endDte;
+    
+    SELECT COUNT(transaction_id), SUM(amount) INTO totalTra, t_t_a FROM transaction WHERE time BETWEEN startDte AND endDte;
+    
+    SELECT COUNT(NIC) INTO t_a_cus FROM customer WHERE openedBranch = brC AND leftDate IS NULL;
+    
+    SELECT COUNT(ID) INTO t_a_emp FROM employee WHERE branchCode = brC AND leftDate IS NULL;
+    
+    SELECT COUNT(f.FD_ID),SUM(amount) INTO no_a_FD, t_fd_a FROM fd f INNER JOIN account a WHERE f.maturityDate >= endDte AND f.savingAcc_id = a.accID AND a.branchCode = brC; 
+    
+    SELECT COUNT(loan_id), SUM(Amount) INTO no_a_loan, t_lo_a FROM approvedloandetails WHERE endDate >= NOW();
+    
+    SELECT COUNT(installment_ID) INTO no_p_ins FROM `installment` WHERE paid_time BETWEEN startDte AND endDte;
+    
+    INSERT INTO monthly_report VALUES(NULL, startDte, endDte, totalDepo, t_d_a, totalWD, t_w_a, totalTra, t_t_a, t_a_cus, t_a_emp, no_a_FD, t_fd_a, no_a_loan, t_lo_a, no_p_ins, brC, CURRENT_TIMESTAMP);
+    
+END$$
+
+DROP PROCEDURE IF EXISTS `generateMonthlyReportBranchwise`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generateMonthlyReportBranchwise` ()  NO SQL
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+    DECLARE BraCd VARCHAR(50);
+	DEClARE brc 
+		CURSOR FOR 
+			SELECT branchCode FROM branch;
+
+	-- declare NOT FOUND handler
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+
+	OPEN brc;
+
+	getBrc: LOOP
+		FETCH brc INTO BraCd;
+		IF finished = 1 THEN 
+			LEAVE getBrc;
+		END IF;
+        CALL `generateMonthlyReport`(BraCd);     
+	END LOOP getBrc;
+    
+	CLOSE brc;
+
+END$$
+
 DROP PROCEDURE IF EXISTS `getAge`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAge` (IN `nicd` VARCHAR(12))  NO SQL
 SELECT DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(dob)), '%Y')+0 AS age FROM customer WHERE NIC = nicd$$
@@ -118,6 +256,10 @@ BEGIN
   	SET splanID = "Children";
   END IF;
  END$$
+
+DROP PROCEDURE IF EXISTS `giveApprovalOfLoan`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `giveApprovalOfLoan` (IN `l_id` INT)  NO SQL
+UPDATE `requestedloan` SET `approved` = '1' WHERE `requestedloan`.`loan_id` = l_id$$
 
 DROP PROCEDURE IF EXISTS `thirtyDayCheck`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `thirtyDayCheck` (IN `inDate` DATETIME, OUT `dividedByThiry` BOOLEAN)  NO SQL
@@ -195,8 +337,8 @@ CREATE TABLE IF NOT EXISTS `account` (
 --
 
 INSERT INTO `account` (`accID`, `NIC`, `branchCode`, `balance`, `createdDate`, `updatedDate`, `type`, `status`, `closed_date`) VALUES
-(7, '990022984v', 'b001', '427876.70', '2021-01-19 15:02:19', '2021-02-18 17:01:54', 'saving', 1, NULL),
-(8, '980021422v', 'b002', '144440.00', '2021-02-01 17:48:51', '2021-02-18 12:58:47', 'current', 1, NULL),
+(7, '990022984v', 'b001', '531476.70', '2021-01-19 15:02:19', '2021-03-02 02:20:56', 'saving', 1, NULL),
+(8, '980021422v', 'b002', '145840.00', '2021-02-01 17:48:51', '2021-03-01 23:09:07', 'current', 1, NULL),
 (9, '981234567v', 'b002', '244406.40', '2021-02-18 13:30:07', '2021-02-18 15:58:34', 'saving', 1, NULL);
 
 -- --------------------------------------------------------
@@ -221,15 +363,54 @@ CREATE TABLE IF NOT EXISTS `accountdetails` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `annual_report`
+--
+
+DROP TABLE IF EXISTS `annual_report`;
+CREATE TABLE IF NOT EXISTS `annual_report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` int(4) NOT NULL,
+  `totalDeposit` int(11) DEFAULT NULL,
+  `total_deposit_amount` decimal(30,2) DEFAULT NULL,
+  `totalWithdrawal` int(11) DEFAULT NULL,
+  `total_withdrawal_amount` decimal(30,2) DEFAULT NULL,
+  `total transaction` int(11) DEFAULT NULL,
+  `total_transaction_amount` decimal(30,2) DEFAULT NULL,
+  `total_active_customer` int(11) DEFAULT NULL,
+  `total_active_employee` int(11) DEFAULT NULL,
+  `no_active_FD` int(11) DEFAULT NULL,
+  `active_FD_amount` decimal(30,2) DEFAULT NULL,
+  `no_active_loan` int(11) DEFAULT NULL,
+  `active_loan_amount` decimal(30,2) DEFAULT NULL,
+  `no_pending_installments` int(11) DEFAULT NULL,
+  `branchCode` varchar(50) NOT NULL,
+  `generated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `annual_report`
+--
+
+INSERT INTO `annual_report` (`id`, `year`, `totalDeposit`, `total_deposit_amount`, `totalWithdrawal`, `total_withdrawal_amount`, `total transaction`, `total_transaction_amount`, `total_active_customer`, `total_active_employee`, `no_active_FD`, `active_FD_amount`, `no_active_loan`, `active_loan_amount`, `no_pending_installments`, `branchCode`, `generated_on`) VALUES
+(2, 2020, 4, '7900.00', 3, '9500.00', 6, '9300.00', 1, 2, 1, '400000.00', 1, '200000.00', 3, 'b001', '2021-02-28 22:52:23'),
+(3, 2020, 1, '800.00', 0, NULL, 6, '9300.00', 2, 2, 1, '100000.00', 1, '200000.00', 3, 'b002', '2021-02-28 22:52:23'),
+(4, 2020, 0, NULL, 1, '760.00', 6, '9300.00', 0, 0, 0, NULL, 1, '200000.00', 3, 'b020', '2021-02-28 22:52:23');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `approvedloan`
 --
 
 DROP TABLE IF EXISTS `approvedloan`;
 CREATE TABLE IF NOT EXISTS `approvedloan` (
   `loan_id` int(11) NOT NULL,
-  `approvedBy` int(11) NOT NULL,
+  `installment_amount` decimal(30,2) NOT NULL,
+  `approvedBy` int(11) DEFAULT NULL,
   `approvedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `nextPaymentDate` datetime NOT NULL,
+  `endDate` datetime NOT NULL,
   `countPayments` int(11) NOT NULL,
   `arrear` decimal(30,2) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
@@ -241,17 +422,35 @@ CREATE TABLE IF NOT EXISTS `approvedloan` (
 -- Dumping data for table `approvedloan`
 --
 
-INSERT INTO `approvedloan` (`loan_id`, `approvedBy`, `approvedDate`, `nextPaymentDate`, `countPayments`, `arrear`, `status`) VALUES
-(1, 6, '2021-02-18 20:14:34', '2021-03-18 20:14:32', 0, '0.00', 1);
+INSERT INTO `approvedloan` (`loan_id`, `installment_amount`, `approvedBy`, `approvedDate`, `nextPaymentDate`, `endDate`, `countPayments`, `arrear`, `status`) VALUES
+(1, '17500.00', 2, '2021-02-18 20:14:34', '2021-02-28 20:14:32', '2022-03-18 10:15:10', 4, '16500.00', 1),
+(4, '17500.00', 1, '2021-03-02 00:54:12', '2021-06-01 07:24:12', '2022-09-01 07:24:12', 2, '5000.00', 1),
+(101, '5833.33', NULL, '2021-03-02 02:20:56', '2021-04-02 02:20:56', '2022-09-02 02:20:56', 0, '0.00', 1);
+
+-- --------------------------------------------------------
 
 --
--- Triggers `approvedloan`
+-- Stand-in structure for view `approvedloandetails`
+-- (See below for the actual view)
 --
-DROP TRIGGER IF EXISTS `giveApprovalOfLoan`;
-DELIMITER $$
-CREATE TRIGGER `giveApprovalOfLoan` AFTER INSERT ON `approvedloan` FOR EACH ROW UPDATE `requestedloan` SET `approved` = '1' WHERE `requestedloan`.`loan_id` = NEW.loan_id
-$$
-DELIMITER ;
+DROP VIEW IF EXISTS `approvedloandetails`;
+CREATE TABLE IF NOT EXISTS `approvedloandetails` (
+`loan_id` int(11)
+,`NIC` varchar(12)
+,`Amount` decimal(30,2)
+,`interestPlanId` int(11)
+,`reason` text
+,`requestedDate` datetime
+,`Duration_in_months` int(11)
+,`installment_amount` decimal(30,2)
+,`approvedBy` int(11)
+,`approvedDate` datetime
+,`nextPaymentDate` datetime
+,`endDate` datetime
+,`countPayments` int(11)
+,`arrear` decimal(30,2)
+,`status` tinyint(1)
+);
 
 -- --------------------------------------------------------
 
@@ -339,7 +538,7 @@ CREATE TABLE IF NOT EXISTS `deposit` (
   KEY `depositBrach` (`branchCode`),
   KEY `deposit Account` (`accID`),
   KEY `depositBy` (`deposit_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `deposit`
@@ -358,7 +557,12 @@ INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCo
 (27, 9, '19222.08', 'Saving Interest', NULL, NULL, '2021-02-18 15:06:00'),
 (34, 7, '60000.00', 'Fixed Deposit', NULL, NULL, '2021-02-18 15:57:34'),
 (35, 9, '13000.00', 'Fixed Deposit', NULL, NULL, '2021-02-18 15:57:34'),
-(38, 7, '500.00', NULL, 'b001', 1, '2021-02-18 17:01:54');
+(38, 7, '500.00', NULL, 'b001', 1, '2021-02-18 17:01:54'),
+(39, 7, '5000.00', 'Mahalpola', 'b001', 1, '2021-03-01 13:18:26'),
+(40, 7, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:20:27'),
+(41, 8, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:24:27'),
+(42, 8, '700.00', 'By Transferring', NULL, NULL, '2021-03-01 23:09:07'),
+(43, 7, '100000.00', 'Loan Dposit From Bank', NULL, NULL, '2021-03-02 02:20:56');
 
 --
 -- Triggers `deposit`
@@ -396,7 +600,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `uniqueAttribur` (`NIC`,`email`) USING BTREE,
   KEY `WorkingBranch` (`branchCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `employee`
@@ -406,8 +610,7 @@ INSERT INTO `employee` (`ID`, `name`, `NIC`, `email`, `password`, `branchCode`, 
 (1, 'HM_xxx', '123456789v', 'headofficemanager@gmail.com', '950a2c1b68ef6dd154800e089f20282a', 'b001', 'head_manager', 1234567890, 'Sample address', '2019-08-08', NULL, '2021-01-15 08:58:48', '2021-01-17 10:08:07', NULL),
 (2, 'Man_yyy', '987654321v', 'manager@gmail.com', '1d0258c2440a8d19e716292b231e3190', 'b002', 'manager', 1234567890, 'Sample 2 address', '2020-08-03', NULL, '2021-01-15 09:05:36', '2021-01-15 09:05:36', NULL),
 (4, 'S_jaffna', '543216789v', 'staffjaffna@gmail.com', '03a9b752cdc8c8d5f1fb3cac18bf7131', 'b001', 'staff', 1234567890, 'jaffna', '2020-06-15', NULL, '2021-01-15 09:13:24', '2021-02-07 00:52:26', NULL),
-(5, 'S_colombo', '990022132v', 'staffcolombo@gmail.com', '8be46aff6e2601f09204dd35268c4114', 'b002', 'staff', 987654321, 'sample', '2020-08-17', NULL, '2021-01-15 09:13:24', '2021-01-15 09:13:24', NULL),
-(6, 'Manager sample', '960222984v', 'manager2@gmail.com', '1d0258c2440a8d19e716292b231e3190', 'b020', 'manager', 76123456, 'Sample addres', '2021-02-15', NULL, '2021-02-15 16:49:31', '2021-02-15 16:49:31', NULL);
+(5, 'S_colombo', '990022132v', 'staffcolombo@gmail.com', '8be46aff6e2601f09204dd35268c4114', 'b002', 'staff', 987654321, 'sample', '2020-08-17', NULL, '2021-01-15 09:13:24', '2021-01-15 09:13:24', NULL);
 
 -- --------------------------------------------------------
 
@@ -423,6 +626,7 @@ CREATE TABLE IF NOT EXISTS `fd` (
   `amount` decimal(30,2) NOT NULL,
   `startDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `maturityDate` datetime NOT NULL,
+  `withdrewOrNot` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`FD_ID`),
   KEY `savings` (`savingAcc_id`),
   KEY `selected_plan` (`FD_plan_id`)
@@ -432,9 +636,9 @@ CREATE TABLE IF NOT EXISTS `fd` (
 -- Dumping data for table `fd`
 --
 
-INSERT INTO `fd` (`FD_ID`, `savingAcc_id`, `FD_plan_id`, `amount`, `startDate`, `maturityDate`) VALUES
-(1, 7, '3 year', '400000.00', '2021-02-18 15:11:55', '2024-07-22 15:10:35'),
-(2, 9, 'half year', '100000.00', '2021-02-18 15:13:20', '2021-08-18 15:12:31');
+INSERT INTO `fd` (`FD_ID`, `savingAcc_id`, `FD_plan_id`, `amount`, `startDate`, `maturityDate`, `withdrewOrNot`) VALUES
+(1, 7, '3 year', '400000.00', '2021-02-18 15:11:55', '2024-07-22 15:10:35', 0),
+(2, 9, 'half year', '100000.00', '2021-02-18 15:13:20', '2021-08-18 15:12:31', 0);
 
 -- --------------------------------------------------------
 
@@ -487,11 +691,69 @@ DROP TABLE IF EXISTS `installment`;
 CREATE TABLE IF NOT EXISTS `installment` (
   `installment_ID` int(11) NOT NULL AUTO_INCREMENT,
   `loan_id` int(11) NOT NULL,
-  `amount` decimal(30,0) NOT NULL,
+  `amount` decimal(30,2) NOT NULL,
   `paid_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`installment_ID`),
   KEY `loan_id` (`loan_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `installment`
+--
+
+INSERT INTO `installment` (`installment_ID`, `loan_id`, `amount`, `paid_time`) VALUES
+(1, 1, '20000.00', '2021-02-22 11:13:46'),
+(2, 1, '40000.00', '2021-02-22 11:14:41'),
+(4, 1, '20000.00', '2021-02-28 15:11:56'),
+(5, 4, '15000.00', '2021-03-02 00:55:25'),
+(6, 4, '25000.00', '2021-03-02 00:56:25');
+
+--
+-- Triggers `installment`
+--
+DROP TRIGGER IF EXISTS `installment_count_set`;
+DELIMITER $$
+CREATE TRIGGER `installment_count_set` AFTER INSERT ON `installment` FOR EACH ROW BEGIN
+	DECLARE m_arr DECIMAL(30,2);
+    DECLARE m_ins DECIMAL(30,2);
+    DECLARE new_arrear DECIMAL(30,2);
+    DECLARE new_count INTEGER;    
+    DECLARE next_p_time DATETIME;
+    DECLARE new_next_p_time DATETIME;
+    
+    SELECT `installment_amount`,`arrear`,`nextPaymentDate` INTO m_ins, m_arr, next_p_time FROM `approvedloan` WHERE `loan_id` = NEW.loan_id;
+    
+    SET new_arrear = (m_arr + NEW.amount) % m_ins;
+    SET new_count = (m_arr + NEW.amount) DIV m_ins;
+    SET new_count = (m_arr + NEW.amount) DIV m_ins;
+    SET new_next_p_time = DATE_ADD(next_p_time, INTERVAL new_count MONTH);
+    
+    UPDATE `approvedloan` SET `countPayments` = countPayments + new_count, `arrear` = new_arrear, `nextPaymentDate` = new_next_p_time WHERE `approvedloan`.`loan_id` = NEW.loan_id;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `late_loan_installment`
+-- (See below for the actual view)
+--
+DROP VIEW IF EXISTS `late_loan_installment`;
+CREATE TABLE IF NOT EXISTS `late_loan_installment` (
+`loan_id` int(11)
+,`NIC` varchar(12)
+,`Amount` decimal(30,2)
+,`installment_amount` decimal(30,2)
+,`reason` text
+,`nextPaymentDate` datetime
+,`arrear` decimal(30,2)
+,`endDate` datetime
+,`name` varchar(50)
+,`eMail` varchar(50)
+,`mobileNo` int(10)
+,`openedBranch` varchar(50)
+);
 
 -- --------------------------------------------------------
 
@@ -519,6 +781,48 @@ INSERT INTO `loan_plan` (`loanPlanId`, `description`, `rate`, `maximumAmount`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `monthly_report`
+--
+
+DROP TABLE IF EXISTS `monthly_report`;
+CREATE TABLE IF NOT EXISTS `monthly_report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `startDate` datetime NOT NULL,
+  `endDate` datetime NOT NULL,
+  `totalDeposit` int(11) DEFAULT NULL,
+  `total_deposit_amount` decimal(30,2) DEFAULT NULL,
+  `totalWithdrawal` int(11) DEFAULT NULL,
+  `total_withdrawal_amount` decimal(30,2) DEFAULT NULL,
+  `total transaction` int(11) DEFAULT NULL,
+  `total_transaction_amount` decimal(30,2) DEFAULT NULL,
+  `total_active_customer` int(11) DEFAULT NULL,
+  `total_active_employee` int(11) DEFAULT NULL,
+  `no_active_FD` int(11) DEFAULT NULL,
+  `active_FD_amount` decimal(30,2) DEFAULT NULL,
+  `no_active_loan` int(11) DEFAULT NULL,
+  `active_loan_amount` decimal(30,2) DEFAULT NULL,
+  `no_pending_installments` int(11) DEFAULT NULL,
+  `branchCode` varchar(50) NOT NULL,
+  `generated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `generatedBranch` (`branchCode`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `monthly_report`
+--
+
+INSERT INTO `monthly_report` (`id`, `startDate`, `endDate`, `totalDeposit`, `total_deposit_amount`, `totalWithdrawal`, `total_withdrawal_amount`, `total transaction`, `total_transaction_amount`, `total_active_customer`, `total_active_employee`, `no_active_FD`, `active_FD_amount`, `no_active_loan`, `active_loan_amount`, `no_pending_installments`, `branchCode`, `generated_on`) VALUES
+(1, '2021-01-25 13:18:00', '2021-02-25 13:18:00', 4, '7900.00', 3, '9500.00', 6, '9300.00', 1, 2, 1, '400000.00', 1, '200000.00', 2, 'b001', '2021-02-25 13:18:00'),
+(2, '2021-01-25 13:18:00', '2021-02-25 13:18:00', 1, '800.00', 0, NULL, 6, '9300.00', 2, 2, 1, '100000.00', 1, '200000.00', 2, 'b002', '2021-02-25 13:18:00'),
+(3, '2021-01-25 13:18:00', '2021-02-25 13:18:00', 0, NULL, 1, '760.00', 6, '9300.00', 0, 1, 0, NULL, 1, '200000.00', 2, 'b020', '2021-02-25 13:18:00'),
+(4, '2021-01-25 13:19:00', '2021-02-25 13:19:00', 4, '7900.00', 3, '9500.00', 6, '9300.00', 1, 2, 1, '400000.00', 1, '200000.00', 2, 'b001', '2021-02-25 13:19:00'),
+(5, '2021-01-25 13:19:00', '2021-02-25 13:19:00', 1, '800.00', 0, NULL, 6, '9300.00', 2, 2, 1, '100000.00', 1, '200000.00', 2, 'b002', '2021-02-25 13:19:00'),
+(6, '2021-01-25 13:19:00', '2021-02-25 13:19:00', 0, NULL, 1, '760.00', 6, '9300.00', 0, 1, 0, NULL, 1, '200000.00', 2, 'b020', '2021-02-25 13:19:00');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `requestedloan`
 --
 
@@ -531,21 +835,50 @@ CREATE TABLE IF NOT EXISTS `requestedloan` (
   `reason` text NOT NULL,
   `requestedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Duration_in_months` int(11) NOT NULL,
-  `maturedDate` datetime NOT NULL,
   `updatedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `pending` tinyint(1) NOT NULL DEFAULT '1',
   `approved` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`loan_id`),
   KEY `customer_nic` (`NIC`),
   KEY `loan_plan_id` (`interestPlanId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `requestedloan`
 --
 
-INSERT INTO `requestedloan` (`loan_id`, `NIC`, `Amount`, `interestPlanId`, `reason`, `requestedDate`, `Duration_in_months`, `maturedDate`, `updatedDate`, `pending`, `approved`) VALUES
-(1, '990022984v', '200000.00', 1, 'Home Loan', '2021-02-18 19:29:28', 12, '2022-02-18 19:28:49', '2021-02-18 20:14:34', 1, 1);
+INSERT INTO `requestedloan` (`loan_id`, `NIC`, `Amount`, `interestPlanId`, `reason`, `requestedDate`, `Duration_in_months`, `updatedDate`, `pending`, `approved`) VALUES
+(1, '990022984v', '200000.00', 1, 'Home Loan', '2021-02-18 19:29:28', 12, '2021-02-18 20:14:34', 1, 1),
+(2, '990022984v', '300000.00', 1, 'Testing', '2021-02-28 00:47:39', 36, '2021-03-02 01:57:36', 1, 0),
+(3, '980021422v', '200000.00', 1, 'Shop Development', '2021-02-28 12:42:54', 24, '2021-02-28 12:55:01', 0, 0),
+(4, '980021422v', '300000.00', 1, 'Home Development', '2021-03-02 00:53:58', 18, '2021-03-02 01:48:19', 1, 1),
+(101, '990022984v', '100000.00', 1, 'Home Development Building', '2021-03-02 02:20:56', 18, '2021-03-02 13:06:57', 0, 0);
+
+--
+-- Triggers `requestedloan`
+--
+DROP TRIGGER IF EXISTS `onlineLoanRequest`;
+DELIMITER $$
+CREATE TRIGGER `onlineLoanRequest` AFTER INSERT ON `requestedloan` FOR EACH ROW BEGIN
+	DECLARE new_next_p_time DATETIME;
+    DECLARE eDate DATETIME;
+    DECLARE ins DECIMAL(30,2);
+    DECLARE nicd VARCHAR(12);
+    
+	if(NEW.pending=1 AND NEW.approved=1) THEN
+    	SET new_next_p_time = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH);
+    	SET eDate = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL NEW.Duration_in_months MONTH);
+    	SET ins = (NEW.Amount * 1.05)/NEW.Duration_in_months;
+        
+        SELECT accID INTO nicd FROM `savings_acc_details` WHERE NIC = NEW.NIC;
+        
+    	INSERT INTO `approvedloan` (`loan_id`, `installment_amount`, `approvedBy`, `approvedDate`, `nextPaymentDate`, `endDate`, `countPayments`, `arrear`, `status`) VALUES (NEW.loan_id, ins, NULL, CURRENT_TIMESTAMP,new_next_p_time, eDate, '0', '0', '1');
+        
+     INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCode`, `deposit_by`, `time`) VALUES (NULL, nicd , NEW.Amount, 'Loan Dposit From Bank', NULL, NULL, CURRENT_TIMESTAMP);
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -628,7 +961,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   PRIMARY KEY (`transaction_id`),
   KEY `sends` (`sender_id`),
   KEY `receives` (`recipient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaction`
@@ -640,7 +973,10 @@ INSERT INTO `transaction` (`transaction_id`, `sender_id`, `recipient_id`, `amoun
 (4, 7, 8, '1800.00', 'sample', '2021-02-16 11:49:00'),
 (6, 8, 7, '600.00', 'Sample', '2021-02-16 11:59:31'),
 (7, 8, 7, '600.00', 'Sample', '2021-02-18 10:08:20'),
-(8, 8, 7, '500.00', NULL, '2021-02-18 10:15:10');
+(8, 8, 7, '500.00', NULL, '2021-02-18 10:15:10'),
+(9, 8, 7, '500.00', NULL, '2021-03-01 20:20:27'),
+(10, 7, 8, '500.00', 'Donate', '2021-03-01 20:24:27'),
+(11, 7, 8, '700.00', NULL, '2021-03-01 23:09:07');
 
 --
 -- Triggers `transaction`
@@ -679,7 +1015,7 @@ CREATE TABLE IF NOT EXISTS `withdrawal` (
   KEY `take Money` (`accID`),
   KEY `location` (`branchCode`),
   KEY `withdrewBy` (`withdrew_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `withdrawal`
@@ -692,7 +1028,10 @@ INSERT INTO `withdrawal` (`withdrawal_id`, `accID`, `amount`, `Description`, `br
 (4, 8, '760.00', 'By Transferring', 'b020', 5, '2021-02-16 11:53:05'),
 (5, 8, '600.00', 'By Transferring', NULL, NULL, '2021-02-16 11:59:31'),
 (6, 8, '600.00', 'By Transferring', NULL, NULL, '2021-02-18 10:08:20'),
-(7, 8, '500.00', 'By Transferring', NULL, NULL, '2021-02-18 10:15:10');
+(7, 8, '500.00', 'By Transferring', NULL, NULL, '2021-02-18 10:15:10'),
+(8, 8, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:20:27'),
+(9, 7, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:24:27'),
+(10, 7, '700.00', 'By Transferring', NULL, NULL, '2021-03-01 23:09:07');
 
 --
 -- Triggers `withdrawal`
@@ -718,12 +1057,32 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure for view `approvedloandetails`
+--
+DROP TABLE IF EXISTS `approvedloandetails`;
+
+DROP VIEW IF EXISTS `approvedloandetails`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `approvedloandetails`  AS  select `r`.`loan_id` AS `loan_id`,`r`.`NIC` AS `NIC`,`r`.`Amount` AS `Amount`,`r`.`interestPlanId` AS `interestPlanId`,`r`.`reason` AS `reason`,`r`.`requestedDate` AS `requestedDate`,`r`.`Duration_in_months` AS `Duration_in_months`,`a`.`installment_amount` AS `installment_amount`,`a`.`approvedBy` AS `approvedBy`,`a`.`approvedDate` AS `approvedDate`,`a`.`nextPaymentDate` AS `nextPaymentDate`,`a`.`endDate` AS `endDate`,`a`.`countPayments` AS `countPayments`,`a`.`arrear` AS `arrear`,`a`.`status` AS `status` from (`requestedloan` `r` join `approvedloan` `a` on((`r`.`loan_id` = `a`.`loan_id`))) ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `fd_active_details`
 --
 DROP TABLE IF EXISTS `fd_active_details`;
 
 DROP VIEW IF EXISTS `fd_active_details`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `fd_active_details`  AS  select `f`.`savingAcc_id` AS `savingAcc_id`,`f`.`amount` AS `amount`,`f`.`startDate` AS `startDate`,`fp`.`rate` AS `rate`,`f`.`FD_ID` AS `FD_ID` from (`fd` `f` join `fd_plan` `fp` on((`f`.`FD_plan_id` = `fp`.`fd_plan_id`))) where (`f`.`maturityDate` > now()) order by `f`.`FD_ID` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `late_loan_installment`
+--
+DROP TABLE IF EXISTS `late_loan_installment`;
+
+DROP VIEW IF EXISTS `late_loan_installment`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `late_loan_installment`  AS  select `a`.`loan_id` AS `loan_id`,`a`.`NIC` AS `NIC`,`a`.`Amount` AS `Amount`,`a`.`installment_amount` AS `installment_amount`,`a`.`reason` AS `reason`,`a`.`nextPaymentDate` AS `nextPaymentDate`,`a`.`arrear` AS `arrear`,`a`.`endDate` AS `endDate`,`c`.`name` AS `name`,`c`.`eMail` AS `eMail`,`c`.`mobileNo` AS `mobileNo`,`c`.`openedBranch` AS `openedBranch` from (`approvedloandetails` `a` join `customer` `c` on((`a`.`NIC` = `c`.`NIC`))) where ((`a`.`nextPaymentDate` < now()) and (`a`.`status` = '1')) ;
 
 -- --------------------------------------------------------
 
@@ -788,6 +1147,12 @@ ALTER TABLE `installment`
   ADD CONSTRAINT `installment_ibfk_1` FOREIGN KEY (`loan_id`) REFERENCES `approvedloan` (`loan_id`);
 
 --
+-- Constraints for table `monthly_report`
+--
+ALTER TABLE `monthly_report`
+  ADD CONSTRAINT `generatedBranch` FOREIGN KEY (`branchCode`) REFERENCES `branch` (`branchCode`);
+
+--
 -- Constraints for table `requestedloan`
 --
 ALTER TABLE `requestedloan`
@@ -824,13 +1189,19 @@ DROP EVENT `withdrawal_set_0`$$
 CREATE DEFINER=`root`@`localhost` EVENT `withdrawal_set_0` ON SCHEDULE EVERY 1 MONTH STARTS '2021-02-04 00:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE `saving_account` SET `no_of_withdrawals` =0$$
 
 DROP EVENT `DepositsavingAccountInterest`$$
-CREATE DEFINER=`root`@`localhost` EVENT `DepositsavingAccountInterest` ON SCHEDULE EVERY 1 DAY STARTS '2021-02-18 18:01:26' ON COMPLETION NOT PRESERVE ENABLE DO CALL `DepositTosavingAccountInterest`()$$
+CREATE DEFINER=`root`@`localhost` EVENT `DepositsavingAccountInterest` ON SCHEDULE EVERY 1 DAY STARTS '2021-02-18 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL `DepositTosavingAccountInterest`()$$
 
 DROP EVENT `DepositForFDInterestToSA`$$
-CREATE DEFINER=`root`@`localhost` EVENT `DepositForFDInterestToSA` ON SCHEDULE EVERY 1 DAY STARTS '2021-02-18 15:59:49' ON COMPLETION NOT PRESERVE ENABLE DO CALL `DepositForFDInterest`()$$
+CREATE DEFINER=`root`@`localhost` EVENT `DepositForFDInterestToSA` ON SCHEDULE EVERY 1 DAY STARTS '2021-02-18 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL `DepositForFDInterest`()$$
 
 DROP EVENT `updateSavingAccountPlan`$$
-CREATE DEFINER=`root`@`localhost` EVENT `updateSavingAccountPlan` ON SCHEDULE EVERY 1 DAY STARTS '2021-02-18 00:01:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL `updateSavingAccPlan`()$$
+CREATE DEFINER=`root`@`localhost` EVENT `updateSavingAccountPlan` ON SCHEDULE EVERY 1 DAY STARTS '2021-02-18 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL `updateSavingAccPlan`()$$
+
+DROP EVENT `generateMonthlyReportBW`$$
+CREATE DEFINER=`root`@`localhost` EVENT `generateMonthlyReportBW` ON SCHEDULE EVERY 1 MONTH STARTS '2021-02-25 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL `generateMonthlyReportBranchwise`()$$
+
+DROP EVENT `generateAnnuallyReportBW`$$
+CREATE DEFINER=`root`@`localhost` EVENT `generateAnnuallyReportBW` ON SCHEDULE EVERY 1 YEAR STARTS '2021-02-27 10:10:27' ON COMPLETION NOT PRESERVE ENABLE DO CALL `generateAnnuallyReportBranchwise()`$$
 
 DELIMITER ;
 COMMIT;

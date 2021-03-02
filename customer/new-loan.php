@@ -1,16 +1,21 @@
 <?php
 
 include("../layout/header.php");
-use Classess\Auth\Staff;
-if(!($loginedUser instanceof Staff)){
+
+use Classess\Auth\Customer;
+use Includes\FD\FD;
+
+if(!($loginedUser instanceof Customer)){
     header("location:../error/403.php");
 }
-if (isset($_POST["addAccount"])) {
-    $msg = $loginedUser->createAccount($_POST["nic"], $loginedUser->getBrachCode(), $_POST["balance"], $_POST["acctype"]);
+$hasFD = $loginedUser->hasFD();
+if (isset($_POST["requestLoan"])) {
+    $msg = $loginedUser->requestLoan($loginedUser->getNIC(), $_POST["balance"], $_POST["reason"], $_POST["durationInMonth"], $_POST["planId"], $hasFD->getBalance());
 }
+
 ?>
 <script>
-    changeTitle("Add New Account | Core Bank");
+    changeTitle("Request A Loan | Core Bank");
 </script>
 
 <!-- end header -->
@@ -28,7 +33,7 @@ if (isset($_POST["addAccount"])) {
                                         <ul class="breadcome-menu">
                                             <li><a href="../home/">Home</a> <span class="bread-slash">/</span>
                                             </li>
-                                            <li><span class="bread-blod">Add New Account</span>
+                                            <li><span class="bread-blod">Request Loan</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -46,45 +51,45 @@ if (isset($_POST["addAccount"])) {
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="product-payment-inner-st">
                             <ul id="myTabedu1" class="tab-review-design">
-                                <li class="active"><a href="#description">Account Details</a></li>                        
+                                <li class="active"><a href="#description">Request Loan Form</a></li>                        
                             </ul>
-                            <div class="add-product">
-                                <a href="viewAccount.php">View Account</a>
-                                </div>
+                            <div class="add-product">                                
+                            </div>
+                            <?php
+                                if($hasFD instanceof FD){                                
+                            ?>
                             <div id="myTabContent" class="tab-content custom-product-edit">
                                 <div class="product-tab-list tab-pane fade active in" id="description">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <div class="review-content-section">
                                                 <div id="dropzone1" class="pro-ad addcoursepro">
-                                                    <form action="#" class="dropzone dropzone-custom needsclick addaccount" id="demo1-upload" method="POST">
+                                                    <form action="#" class="dropzone dropzone-custom needsclick addaccountloan" id="demo1-upload" method="POST">
                                                         <div class="row">
-                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                <div class="form-group">
-                                                                    <input name="nic" type="text" class="form-control" placeholder="NIC">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <input name="branch" type="text" class="form-control" placeholder="Branch" readonly value="Branch : <?php echo $loginedUser->getBrachCode()?>">
-                                                                </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">                                                                                                                             
                                                                 <div class="form-group">
                                                                     <input name="balance" type="number" class="form-control" placeholder="Enter Intial Amount" min="0">
-                                                                </div>
+                                                                </div>                                                                
                                                                 <div class="form-group">
-                                                                    <select name="acctype" class="form-control">
-																		<option value="none" selected disabled>Select Account Type</option>
-																		<option value="saving">saving</option>
-																		<option value="current">current</option>
-																	</select>
-                                                                </div>
-
-                            
-
+                                                                    <textarea name="reason" class="form-control" placeholder="Reason of Your loan"></textarea>
+                                                                </div>                
                                                             </div>
                                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                <div class="form-group">
+                                                                    <input name="durationInMonth" type="number" class="form-control" placeholder="Duration In Months" min="0">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <select name="planId" class="form-control">
+																		<option value="none" selected disabled>Select Plan Id</option>
+																		<?php 
+                                                                            echo $loginedUser->getLoanPlanIdsAsOptions();
+                                                                        ?>
+																	</select>
+                                                                </div>                                                                 
                                                                 <div class="sparkline12-list mg-b-30">
                                                                     <div class="sparkline12-hd">
                                                                         <div class="main-sparkline12-hd">
-                                                                            <h1>Saving Account Plans</h1>
+                                                                            <h1>Loan Plans</h1>
                                                                         </div>
                                                                     </div>
                                                                     <div class="sparkline12-graph">
@@ -94,27 +99,28 @@ if (isset($_POST["addAccount"])) {
                                                                                     <tr>
                                                                                         <th>#</th>
                                                                                         <th>Category</th>
-                                                                                        <th>Description</th>
-                                                                                        <th>Minimum Amount</th>
+                                                                                        <th>Description</th>                                                                                        
                                                                                         <th>Rate</th>
+                                                                                        <th>Maximum Amount</th>
+                                                                                        <th>Maximum Amount Apply tp FD</th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                     <?php
-                                                                                        echo $loginedUser->getAllSavingPlans();                                                                                        
+                                                                                        echo $loginedUser->getAllLoanPlans();                                                                                        
                                                                                     ?>                                                                                                                                                    
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                </div>                                                               
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="payment-adress">
-                                                                    <button type="submit" class="btn btn-primary waves-effect waves-light" name="addAccount">Submit</button>
+                                                                    <button type="submit" class="btn btn-primary waves-effect waves-light" name="requestLoan">Submit</button>
                                                                     <br/><br/>
                                                                     <div class="col-lg-3 col-md-3 col-sm-3"></div>
                                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -133,6 +139,12 @@ if (isset($_POST["addAccount"])) {
                                     </div>
                                 </div>
                             </div>
+
+                            <?php
+                                }else{
+                                    echo $hasFD;
+                                }
+                            ?>
                         </div>
                     </div>
                 </div>
