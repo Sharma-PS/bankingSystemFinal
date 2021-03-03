@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 02, 2021 at 12:21 PM
+-- Generation Time: Mar 03, 2021 at 01:10 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -53,7 +53,7 @@ BEGIN
 		-- update interest
         CALL `thirtyDayCheck`(c_date, @p1); SELECT @p1 INTO resTDC;
        	IF resTDC = 1 THEN
-        	INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCode`, `deposit_by`, `time`) VALUES (NULL, a_id, ((blnc * rte)/100), 'Fixed Deposit', NULL, NULL, CURRENT_TIMESTAMP);
+        	INSERT INTO deposit_online (`deposit_id`, `accID`, `amount`, `Description`, `time`) VALUES (NULL, a_id, ((blnc * rte)/100), 'Fixed Deposit', CURRENT_TIMESTAMP);
         END IF;      
 	END LOOP getCDate;
 	CLOSE curCDate;
@@ -88,7 +88,7 @@ BEGIN
 		-- update interest
         CALL `thirtyDayCheck`(c_date, @p1); SELECT @p1 INTO resTDC;
        	IF resTDC = 1 THEN
-        	INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCode`, `deposit_by`, `time`) VALUES (NULL, a_id, ((blnc * rte)/100), 'Saving Interest', NULL, NULL, CURRENT_TIMESTAMP);
+        	INSERT INTO deposit_online (`deposit_id`, `accID`, `amount`, `Description`, `time`) VALUES (NULL, a_id, ((blnc * rte)/100), 'Saving Interest', CURRENT_TIMESTAMP);
         END IF;      
 	END LOOP getCDate;
 	CLOSE curCDate;
@@ -337,9 +337,9 @@ CREATE TABLE IF NOT EXISTS `account` (
 --
 
 INSERT INTO `account` (`accID`, `NIC`, `branchCode`, `balance`, `createdDate`, `updatedDate`, `type`, `status`, `closed_date`) VALUES
-(7, '990022984v', 'b001', '531476.70', '2021-01-19 15:02:19', '2021-03-02 02:20:56', 'saving', 1, NULL),
-(8, '980021422v', 'b002', '145840.00', '2021-02-01 17:48:51', '2021-03-01 23:09:07', 'current', 1, NULL),
-(9, '981234567v', 'b002', '244406.40', '2021-02-18 13:30:07', '2021-02-18 15:58:34', 'saving', 1, NULL);
+(7, '990022984v', 'b001', '557977.70', '2021-01-19 15:02:19', '2021-03-03 18:20:02', 'saving', 1, NULL),
+(8, '980021422v', 'b002', '143340.00', '2021-02-01 17:48:51', '2021-03-03 18:20:42', 'current', 1, NULL),
+(9, '981234567v', 'b002', '192406.40', '2021-02-18 13:30:07', '2021-03-03 17:21:14', 'saving', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -423,7 +423,7 @@ CREATE TABLE IF NOT EXISTS `approvedloan` (
 --
 
 INSERT INTO `approvedloan` (`loan_id`, `installment_amount`, `approvedBy`, `approvedDate`, `nextPaymentDate`, `endDate`, `countPayments`, `arrear`, `status`) VALUES
-(1, '17500.00', 2, '2021-02-18 20:14:34', '2021-02-28 20:14:32', '2022-03-18 10:15:10', 4, '16500.00', 1),
+(1, '17500.00', 2, '2021-02-18 20:14:34', '2021-02-28 20:14:32', '2022-03-18 10:15:10', 6, '1500.00', 1),
 (4, '17500.00', 1, '2021-03-02 00:54:12', '2021-06-01 07:24:12', '2022-09-01 07:24:12', 2, '5000.00', 1),
 (101, '5833.33', NULL, '2021-03-02 02:20:56', '2021-04-02 02:20:56', '2022-09-02 02:20:56', 0, '0.00', 1);
 
@@ -476,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `branch` (
 --
 
 INSERT INTO `branch` (`branchCode`, `branchName`, `Address`, `type`, `contactNo`, `openedDate`, `updatedDate`, `status`) VALUES
-('b001', 'Jaffna', 'Jaffna town', 'H_O', 1234567890, '2021-01-14', '2021-02-08 13:38:19', '1'),
+('b001', 'Jaffna', 'Jaffna town', 'H_O', 1234567890, '2021-01-14', '2021-03-02 21:21:10', '1'),
 ('b002', 'Colombo', 'Colombo', 'br', 987654321, '2021-01-01', '2021-02-18 16:40:08', '0'),
 ('b020', 'Kandy', 'Pera', 'br', 771234567, '2021-02-07', '2021-02-08 13:11:35', '1');
 
@@ -527,18 +527,18 @@ INSERT INTO `customer` (`NIC`, `name`, `eMail`, `password`, `mobileNo`, `tempAdd
 
 DROP TABLE IF EXISTS `deposit`;
 CREATE TABLE IF NOT EXISTS `deposit` (
-  `deposit_id` int(11) NOT NULL AUTO_INCREMENT,
+  `deposit_id` int(11) NOT NULL,
   `accID` int(11) NOT NULL,
   `amount` decimal(30,2) NOT NULL,
   `Description` text,
-  `branchCode` varchar(50) DEFAULT NULL,
-  `deposit_by` int(11) DEFAULT NULL,
+  `branchCode` varchar(50) NOT NULL,
+  `deposit_by` int(11) NOT NULL,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`deposit_id`),
   KEY `depositBrach` (`branchCode`),
   KEY `deposit Account` (`accID`),
   KEY `depositBy` (`deposit_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `deposit`
@@ -549,20 +549,9 @@ INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCo
 (9, 7, '800.00', NULL, 'b002', 5, '2021-02-08 00:35:21'),
 (10, 8, '4000.00', NULL, 'b001', 1, '2021-02-08 00:39:46'),
 (11, 7, '1600.00', 'Fund Rise', 'b001', 1, '2021-02-08 00:40:43'),
-(16, 7, '600.00', 'By Transferring', NULL, NULL, '2021-02-16 11:59:31'),
-(17, 7, '600.00', 'By Transferring', NULL, NULL, '2021-02-18 10:08:20'),
-(18, 7, '500.00', 'By Transferring', NULL, NULL, '2021-02-18 10:15:10'),
-(25, 9, '17162.64', 'Saving Interest', NULL, NULL, '2021-02-18 14:59:41'),
-(26, 7, '11579.70', 'Saving Interest', NULL, NULL, '2021-02-18 15:06:00'),
-(27, 9, '19222.08', 'Saving Interest', NULL, NULL, '2021-02-18 15:06:00'),
-(34, 7, '60000.00', 'Fixed Deposit', NULL, NULL, '2021-02-18 15:57:34'),
-(35, 9, '13000.00', 'Fixed Deposit', NULL, NULL, '2021-02-18 15:57:34'),
 (38, 7, '500.00', NULL, 'b001', 1, '2021-02-18 17:01:54'),
 (39, 7, '5000.00', 'Mahalpola', 'b001', 1, '2021-03-01 13:18:26'),
-(40, 7, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:20:27'),
-(41, 8, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:24:27'),
-(42, 8, '700.00', 'By Transferring', NULL, NULL, '2021-03-01 23:09:07'),
-(43, 7, '100000.00', 'Loan Dposit From Bank', NULL, NULL, '2021-03-02 02:20:56');
+(45, 7, '1800.00', 'ATM', 'b020', 2, '2021-03-03 10:11:39');
 
 --
 -- Triggers `deposit`
@@ -572,6 +561,85 @@ DELIMITER $$
 CREATE TRIGGER `Deposit_to_account` AFTER INSERT ON `deposit` FOR EACH ROW UPDATE account
 SET balance = (balance + NEW.amount)
 WHERE accID = NEW.accID
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `setDepositID`;
+DELIMITER $$
+CREATE TRIGGER `setDepositID` BEFORE INSERT ON `deposit` FOR EACH ROW BEGIN
+DECLARE newId Integer;
+
+SELECT MAX(deposit_id) INTO newId FROM deposit_collection;
+SET NEW.deposit_id = newId +1;
+
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `deposit_collection`
+-- (See below for the actual view)
+--
+DROP VIEW IF EXISTS `deposit_collection`;
+CREATE TABLE IF NOT EXISTS `deposit_collection` (
+`deposit_id` int(11)
+,`accID` int(11)
+,`amount` decimal(30,2)
+,`Description` text
+,`branchCode` varchar(50)
+,`deposit_by` int(11)
+,`time` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deposit_online`
+--
+
+DROP TABLE IF EXISTS `deposit_online`;
+CREATE TABLE IF NOT EXISTS `deposit_online` (
+  `deposit_id` int(11) NOT NULL,
+  `accID` int(11) NOT NULL,
+  `amount` decimal(30,2) NOT NULL,
+  `Description` text,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`deposit_id`),
+  KEY `accID` (`accID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `deposit_online`
+--
+
+INSERT INTO `deposit_online` (`deposit_id`, `accID`, `amount`, `Description`, `time`) VALUES
+(46, 8, '2000.00', 'Deposit Onlie', '2021-03-03 17:32:33'),
+(47, 8, '2000.00', 'By Transferring', '2021-03-03 17:33:27'),
+(48, 8, '600.00', 'By Transferring', '2021-03-03 17:46:24'),
+(49, 7, '60000.00', 'Saving Interest', '2021-03-03 17:53:56'),
+(50, 8, '500.00', 'By Transferring', '2021-03-03 18:00:56'),
+(51, 8, '750.00', 'By Transferring', '2021-03-03 18:20:02');
+
+--
+-- Triggers `deposit_online`
+--
+DROP TRIGGER IF EXISTS `Deposit_to_account_online`;
+DELIMITER $$
+CREATE TRIGGER `Deposit_to_account_online` BEFORE INSERT ON `deposit_online` FOR EACH ROW UPDATE account
+SET balance =(balance + NEW.amount)
+WHERE accID=NEW.accID
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `setDepositIDOnline`;
+DELIMITER $$
+CREATE TRIGGER `setDepositIDOnline` BEFORE INSERT ON `deposit_online` FOR EACH ROW BEGIN
+DECLARE newId Integer;
+
+SELECT MAX(deposit_id) INTO newId FROM deposit_collection;
+SET NEW.deposit_id = newId +1;
+
+END
 $$
 DELIMITER ;
 
@@ -637,7 +705,7 @@ CREATE TABLE IF NOT EXISTS `fd` (
 --
 
 INSERT INTO `fd` (`FD_ID`, `savingAcc_id`, `FD_plan_id`, `amount`, `startDate`, `maturityDate`, `withdrewOrNot`) VALUES
-(1, 7, '3 year', '400000.00', '2021-02-18 15:11:55', '2024-07-22 15:10:35', 0),
+(1, 7, '3 year', '400000.00', '2021-02-01 15:11:55', '2024-02-01 15:10:35', 0),
 (2, 9, 'half year', '100000.00', '2021-02-18 15:13:20', '2021-08-18 15:12:31', 0);
 
 -- --------------------------------------------------------
@@ -695,7 +763,7 @@ CREATE TABLE IF NOT EXISTS `installment` (
   `paid_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`installment_ID`),
   KEY `loan_id` (`loan_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `installment`
@@ -706,7 +774,11 @@ INSERT INTO `installment` (`installment_ID`, `loan_id`, `amount`, `paid_time`) V
 (2, 1, '40000.00', '2021-02-22 11:14:41'),
 (4, 1, '20000.00', '2021-02-28 15:11:56'),
 (5, 4, '15000.00', '2021-03-02 00:55:25'),
-(6, 4, '25000.00', '2021-03-02 00:56:25');
+(6, 4, '25000.00', '2021-03-02 00:56:25'),
+(7, 1, '5000.00', '2021-03-02 18:18:23'),
+(8, 1, '5000.00', '2021-03-03 18:08:59'),
+(9, 1, '5000.00', '2021-03-03 18:09:28'),
+(10, 1, '5000.00', '2021-03-03 18:10:12');
 
 --
 -- Triggers `installment`
@@ -874,7 +946,7 @@ CREATE TRIGGER `onlineLoanRequest` AFTER INSERT ON `requestedloan` FOR EACH ROW 
         
     	INSERT INTO `approvedloan` (`loan_id`, `installment_amount`, `approvedBy`, `approvedDate`, `nextPaymentDate`, `endDate`, `countPayments`, `arrear`, `status`) VALUES (NEW.loan_id, ins, NULL, CURRENT_TIMESTAMP,new_next_p_time, eDate, '0', '0', '1');
         
-     INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCode`, `deposit_by`, `time`) VALUES (NULL, nicd , NEW.Amount, 'Loan Dposit From Bank', NULL, NULL, CURRENT_TIMESTAMP);
+     INSERT INTO deposit_online (`deposit_id`, `accID`, `amount`, `Description`, `time`) VALUES (NULL, nicd , NEW.Amount, 'Loan Dposit From Bank',  CURRENT_TIMESTAMP);
     END IF;
 END
 $$
@@ -916,8 +988,8 @@ CREATE TABLE IF NOT EXISTS `saving_account` (
 --
 
 INSERT INTO `saving_account` (`accID`, `s_plan_id`, `no_of_withdrawals`) VALUES
-(7, 'Adult', 2),
-(9, 'Adult', 0);
+(7, 'Adult', 5),
+(9, 'Adult', 1);
 
 -- --------------------------------------------------------
 
@@ -961,7 +1033,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   PRIMARY KEY (`transaction_id`),
   KEY `sends` (`sender_id`),
   KEY `receives` (`recipient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaction`
@@ -976,7 +1048,12 @@ INSERT INTO `transaction` (`transaction_id`, `sender_id`, `recipient_id`, `amoun
 (8, 8, 7, '500.00', NULL, '2021-02-18 10:15:10'),
 (9, 8, 7, '500.00', NULL, '2021-03-01 20:20:27'),
 (10, 7, 8, '500.00', 'Donate', '2021-03-01 20:24:27'),
-(11, 7, 8, '700.00', NULL, '2021-03-01 23:09:07');
+(11, 7, 8, '700.00', NULL, '2021-03-01 23:09:07'),
+(12, 7, 8, '4000.00', 'Urgent', '2021-03-02 21:14:28'),
+(13, 7, 8, '2000.00', 'Transfer fund', '2021-03-03 17:33:27'),
+(14, 7, 8, '600.00', 'Last', '2021-03-03 17:46:24'),
+(15, 7, 8, '500.00', 'Thakshayan', '2021-03-03 18:00:56'),
+(16, 7, 8, '750.00', 'Urgent', '2021-03-03 18:20:02');
 
 --
 -- Triggers `transaction`
@@ -990,8 +1067,9 @@ WHERE accID = NEW.sender_id;
 UPDATE account
 SET balance = (balance + NEW.amount)
 WHERE accID = NEW.recipient_id;
-INSERT INTO `deposit` (`deposit_id`, `accID`, `amount`, `Description`, `branchCode`, `deposit_by`, `time`) VALUES (NULL, NEW.recipient_id, NEW.amount, 'By Transferring', NULL, NULL, CURRENT_TIMESTAMP);
-INSERT INTO `withdrawal` (`withdrawal_id`, `accID`, `amount`, `Description`, `branchCode`, `withdrew_by`, `time`) VALUES (NULL, NEW.sender_id, NEW.amount, 'By Transferring', NULL, NULL, CURRENT_TIMESTAMP);
+INSERT INTO deposit_online (`deposit_id`, `accID`, `amount`, `Description`, `time`) VALUES (NULL, NEW.recipient_id, NEW.amount, 'By Transferring', CURRENT_TIMESTAMP);
+
+INSERT INTO withdrawal_online (`withdrawal_id`, `accID`, `amount`, `Description`, `time`) VALUES (NULL, NEW.sender_id, NEW.amount, 'By Transferring', CURRENT_TIMESTAMP);
 END
 $$
 DELIMITER ;
@@ -1004,7 +1082,7 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `withdrawal`;
 CREATE TABLE IF NOT EXISTS `withdrawal` (
-  `withdrawal_id` int(11) NOT NULL AUTO_INCREMENT,
+  `withdrawal_id` int(11) NOT NULL,
   `accID` int(11) NOT NULL,
   `amount` decimal(30,2) NOT NULL,
   `Description` text,
@@ -1015,23 +1093,21 @@ CREATE TABLE IF NOT EXISTS `withdrawal` (
   KEY `take Money` (`accID`),
   KEY `location` (`branchCode`),
   KEY `withdrewBy` (`withdrew_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `withdrawal`
 --
 
 INSERT INTO `withdrawal` (`withdrawal_id`, `accID`, `amount`, `Description`, `branchCode`, `withdrew_by`, `time`) VALUES
-(1, 7, '4500.00', NULL, 'b001', 1, '2021-02-08 12:47:59'),
-(2, 7, '3000.00', NULL, 'b001', 1, '2021-02-08 12:48:41'),
-(3, 7, '2000.00', NULL, 'b001', 1, '2021-02-08 12:49:12'),
-(4, 8, '760.00', 'By Transferring', 'b020', 5, '2021-02-16 11:53:05'),
-(5, 8, '600.00', 'By Transferring', NULL, NULL, '2021-02-16 11:59:31'),
-(6, 8, '600.00', 'By Transferring', NULL, NULL, '2021-02-18 10:08:20'),
-(7, 8, '500.00', 'By Transferring', NULL, NULL, '2021-02-18 10:15:10'),
-(8, 8, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:20:27'),
-(9, 7, '500.00', 'By Transferring', NULL, NULL, '2021-03-01 20:24:27'),
-(10, 7, '700.00', 'By Transferring', NULL, NULL, '2021-03-01 23:09:07');
+(14, 7, '1000.00', NULL, 'b001', 4, '2021-03-02 21:49:35'),
+(15, 8, '15000.00', 'Urgent', 'b001', 4, '2021-03-02 21:49:55'),
+(16, 9, '10000.00', NULL, 'b001', 4, '2021-03-02 21:50:03'),
+(17, 9, '40000.00', NULL, 'b020', 5, '2021-03-02 21:51:01'),
+(18, 8, '600.00', 'Testing', 'b002', 2, '2021-03-02 21:52:08'),
+(19, 8, '1800.00', 'Testoing', 'b001', 5, '2021-03-03 16:26:08'),
+(22, 8, '1800.00', 'Tef', 'b002', 5, '2021-03-03 16:55:27'),
+(553, 8, '1000.00', 'Medical', 'b001', 1, '2021-03-03 18:20:42');
 
 --
 -- Triggers `withdrawal`
@@ -1041,6 +1117,87 @@ DELIMITER $$
 CREATE TRIGGER `Withdraw_from_account` AFTER INSERT ON `withdrawal` FOR EACH ROW UPDATE account
 SET balance = (balance - NEW.amount)
 WHERE accID = NEW.accID
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `setWithdrewID`;
+DELIMITER $$
+CREATE TRIGGER `setWithdrewID` BEFORE INSERT ON `withdrawal` FOR EACH ROW BEGIN
+DECLARE newId Integer;
+
+SELECT MAX(withdrawal_id) INTO newId FROM withdrawal_collection;
+SET NEW.withdrawal_id = newId +1;
+
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `withdrawal_collection`
+-- (See below for the actual view)
+--
+DROP VIEW IF EXISTS `withdrawal_collection`;
+CREATE TABLE IF NOT EXISTS `withdrawal_collection` (
+`withdrawal_id` int(11)
+,`accID` int(11)
+,`amount` decimal(30,2)
+,`Description` text
+,`branchCode` varchar(50)
+,`withdrew_by` int(11)
+,`time` datetime
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `withdrawal_online`
+--
+
+DROP TABLE IF EXISTS `withdrawal_online`;
+CREATE TABLE IF NOT EXISTS `withdrawal_online` (
+  `withdrawal_id` int(11) NOT NULL,
+  `accID` int(11) NOT NULL,
+  `amount` decimal(30,2) NOT NULL,
+  `Description` text NOT NULL,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`withdrawal_id`),
+  KEY `takes Money Online` (`accID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `withdrawal_online`
+--
+
+INSERT INTO `withdrawal_online` (`withdrawal_id`, `accID`, `amount`, `Description`, `time`) VALUES
+(76, 9, '1800.00', 'dfsdf', '2021-03-03 17:01:09'),
+(546, 7, '456.00', 'fgdg', '2021-03-03 17:01:09'),
+(547, 7, '2000.00', 'By Transferring', '2021-03-03 17:33:27'),
+(548, 7, '600.00', 'By Transferring', '2021-03-03 17:46:24'),
+(549, 7, '500.00', 'By Transferring', '2021-03-03 18:00:56'),
+(550, 7, '5000.00', 'For Loan Payment', '2021-03-03 18:09:28'),
+(551, 7, '5000.00', 'For Loan Payment', '2021-03-03 18:10:11'),
+(552, 7, '750.00', 'By Transferring', '2021-03-03 18:20:02');
+
+--
+-- Triggers `withdrawal_online`
+--
+DROP TRIGGER IF EXISTS `Withdraw_from_account_online`;
+DELIMITER $$
+CREATE TRIGGER `Withdraw_from_account_online` BEFORE INSERT ON `withdrawal_online` FOR EACH ROW UPDATE account
+SET balance = (balance - NEW.amount)
+WHERE accID = NEW.accID
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `setWithdrewIDOnline`;
+DELIMITER $$
+CREATE TRIGGER `setWithdrewIDOnline` BEFORE INSERT ON `withdrawal_online` FOR EACH ROW BEGIN
+DECLARE newId Integer;
+
+SELECT MAX(withdrawal_id) INTO newId FROM withdrawal_collection;
+SET NEW.withdrawal_id = newId +1;
+
+END
 $$
 DELIMITER ;
 
@@ -1063,6 +1220,16 @@ DROP TABLE IF EXISTS `approvedloandetails`;
 
 DROP VIEW IF EXISTS `approvedloandetails`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `approvedloandetails`  AS  select `r`.`loan_id` AS `loan_id`,`r`.`NIC` AS `NIC`,`r`.`Amount` AS `Amount`,`r`.`interestPlanId` AS `interestPlanId`,`r`.`reason` AS `reason`,`r`.`requestedDate` AS `requestedDate`,`r`.`Duration_in_months` AS `Duration_in_months`,`a`.`installment_amount` AS `installment_amount`,`a`.`approvedBy` AS `approvedBy`,`a`.`approvedDate` AS `approvedDate`,`a`.`nextPaymentDate` AS `nextPaymentDate`,`a`.`endDate` AS `endDate`,`a`.`countPayments` AS `countPayments`,`a`.`arrear` AS `arrear`,`a`.`status` AS `status` from (`requestedloan` `r` join `approvedloan` `a` on((`r`.`loan_id` = `a`.`loan_id`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `deposit_collection`
+--
+DROP TABLE IF EXISTS `deposit_collection`;
+
+DROP VIEW IF EXISTS `deposit_collection`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `deposit_collection`  AS  select `deposit`.`deposit_id` AS `deposit_id`,`deposit`.`accID` AS `accID`,`deposit`.`amount` AS `amount`,`deposit`.`Description` AS `Description`,`deposit`.`branchCode` AS `branchCode`,`deposit`.`deposit_by` AS `deposit_by`,`deposit`.`time` AS `time` from `deposit` union all select `deposit_online`.`deposit_id` AS `deposit_id`,`deposit_online`.`accID` AS `accID`,`deposit_online`.`amount` AS `amount`,`deposit_online`.`Description` AS `Description`,NULL AS `branchCode`,NULL AS `deposit_by`,`deposit_online`.`time` AS `time` from `deposit_online` ;
 
 -- --------------------------------------------------------
 
@@ -1093,6 +1260,16 @@ DROP TABLE IF EXISTS `savings_acc_details`;
 
 DROP VIEW IF EXISTS `savings_acc_details`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `savings_acc_details`  AS  select `a`.`accID` AS `accID`,`a`.`NIC` AS `NIC`,`a`.`balance` AS `balance`,`a`.`createdDate` AS `createdDate`,`s`.`s_plan_id` AS `s_plan_id`,`sp`.`rate` AS `rate` from ((`account` `a` join `saving_account` `s` on((`a`.`accID` = `s`.`accID`))) join `saving_interest_plan` `sp` on((`s`.`s_plan_id` = `sp`.`s_plan_id`))) where ((`a`.`type` = 'saving') and isnull(`a`.`closed_date`)) order by `a`.`accID` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `withdrawal_collection`
+--
+DROP TABLE IF EXISTS `withdrawal_collection`;
+
+DROP VIEW IF EXISTS `withdrawal_collection`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `withdrawal_collection`  AS  select `withdrawal`.`withdrawal_id` AS `withdrawal_id`,`withdrawal`.`accID` AS `accID`,`withdrawal`.`amount` AS `amount`,`withdrawal`.`Description` AS `Description`,`withdrawal`.`branchCode` AS `branchCode`,`withdrawal`.`withdrew_by` AS `withdrew_by`,`withdrawal`.`time` AS `time` from `withdrawal` union all select `withdrawal_online`.`withdrawal_id` AS `withdrawal_id`,`withdrawal_online`.`accID` AS `accID`,`withdrawal_online`.`amount` AS `amount`,`withdrawal_online`.`Description` AS `Description`,NULL AS `branchCode`,NULL AS `withdrew_by`,`withdrawal_online`.`time` AS `time` from `withdrawal_online` ;
 
 --
 -- Constraints for dumped tables
@@ -1126,6 +1303,12 @@ ALTER TABLE `deposit`
   ADD CONSTRAINT `deposit Account` FOREIGN KEY (`accID`) REFERENCES `account` (`accID`),
   ADD CONSTRAINT `depositBrach` FOREIGN KEY (`branchCode`) REFERENCES `branch` (`branchCode`),
   ADD CONSTRAINT `depositBy` FOREIGN KEY (`deposit_by`) REFERENCES `employee` (`ID`);
+
+--
+-- Constraints for table `deposit_online`
+--
+ALTER TABLE `deposit_online`
+  ADD CONSTRAINT `deposit Account online` FOREIGN KEY (`accID`) REFERENCES `account` (`accID`);
 
 --
 -- Constraints for table `employee`
@@ -1180,6 +1363,12 @@ ALTER TABLE `withdrawal`
   ADD CONSTRAINT `location` FOREIGN KEY (`branchCode`) REFERENCES `branch` (`branchCode`),
   ADD CONSTRAINT `take Money` FOREIGN KEY (`accID`) REFERENCES `account` (`accID`),
   ADD CONSTRAINT `withdrewBy` FOREIGN KEY (`withdrew_by`) REFERENCES `employee` (`ID`);
+
+--
+-- Constraints for table `withdrawal_online`
+--
+ALTER TABLE `withdrawal_online`
+  ADD CONSTRAINT `takes Money Online` FOREIGN KEY (`accID`) REFERENCES `account` (`accID`);
 
 DELIMITER $$
 --

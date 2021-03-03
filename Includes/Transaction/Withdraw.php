@@ -69,6 +69,44 @@ class Withdraw extends Connection
         return ACCOUNTNOTFOUND;
         
     }
+
+    public function makeWithDrawOnline():string
+    {   
+        $conn = (new Connection);
+        $sql = "SELECT balance,type,status,no_of_withdrawals FROM accountdetails WHERE accID = ?";
+        $stmt = $conn->connect()->prepare($sql);
+        $stmt->execute([$this->accID]);
+        $found = $stmt->fetch();
+        if($found){ //check account found or not
+            if($found["status"]){ //check account active or not
+                if($found["balance"] > $this->amount){                    
+                    if($found["type"] == "current"){
+                        $sql2 = "INSERT INTO `withdrawal_online` (`withdrawal_id`, `accID`, `amount`, `Description`, `time`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP);";
+                        $stmt2 = $conn->connect()->prepare($sql2);
+                        $stmt2->execute([$this->accID, $this->amount, $this->description]);                        
+                    }                    
+                    else{
+                        if($found["no_of_withdrawals"] < 5){
+                            $sql2 = "INSERT INTO `withdrawal_online` (`withdrawal_id`, `accID`, `amount`, `Description`, `time`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP);";
+                            $stmt2 = $conn->connect()->prepare($sql2);
+                            $stmt2->execute([$this->accID, $this->amount, $this->description]);                        
+                            $sql3 = "UPDATE `saving_account` SET `no_of_withdrawals` = no_of_withdrawals + 1 WHERE accID = ?";
+                            $stmt3 = $conn->connect()->prepare($sql3);
+                            $stmt3->execute([$this->accID]);   
+                            return SUCCESSWITHDRAW;   
+                        }
+                        return REACHEDMAXWITHDRAWAL;
+                    }
+                    return SUCCESSWITHDRAW;                    
+                }else{
+                    return NOTENOUGHMONEY;
+                }              
+            }
+            else{ return ACCOUNTCLOSED; }            
+        }
+        return ACCOUNTNOTFOUND;
+        
+    }
 }
 
 

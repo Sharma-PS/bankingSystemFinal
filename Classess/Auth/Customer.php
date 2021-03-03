@@ -174,7 +174,7 @@ class Customer extends User
         $enoghmoney = (new Account($accID))->hasEnoghMoney($amount);
         if($enoghmoney == "TRUE"){
             $withDrew = (new Withdraw($accID, $amount, "For Loan Payment"));
-            if($withDrew->makeWithDraw() == SUCCESSWITHDRAW){
+            if($withDrew->makeWithDrawOnline() == SUCCESSWITHDRAW){
                 return (new Installment())->makePayment($loanId, $amount);
             }
             return REACHEDMAXWITHDRAWAL;
