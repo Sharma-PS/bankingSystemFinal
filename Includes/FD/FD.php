@@ -59,6 +59,17 @@ class FD extends Connection
         return $stmt->fetchAll();
     }
 
+        /**
+     * return all account details from database
+     */
+    public function ViewAllFDsCustomer($nic):array
+    {
+        $sql = "SELECT f.`FD_ID`, f.`savingAcc_id`,f.`FD_plan_id`,f.`amount`,f.`startDate`,f.`maturityDate`,f.`withdrewOrNot`, a.NIC FROM fd f INNER JOIN account a WHERE f.savingAcc_id = a.accID AND NIC = ?";
+        $stmt = (new Connection)->connect()->prepare($sql);
+        $stmt->execute([$nic]);
+        return $stmt->fetchAll();
+    }
+
     /**
      * Get the value of endDate
      */ 

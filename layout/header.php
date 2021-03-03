@@ -108,6 +108,13 @@ use Classess\Auth\Staff;
 								   <span class="mini-click-non">Accounts</span>
 								</a>
                         </li>
+
+                        <li>
+                                <a  href="../customer/myFDs.php">
+								   <span class="educate-icon educate-library icon-wrap"></span>
+								   <span class="mini-click-non">My FDs</span>
+								</a>
+                        </li>
                         
                         <li>
                             <a href="../customer/transaction.php" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Online Transaction</span></a>

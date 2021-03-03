@@ -3,6 +3,7 @@ namespace Classess\Auth;
 
 use Classess\Account\Account;
 use Includes\DB\Connection;
+use Includes\FD\FD;
 use Includes\Installment\Installment;
 use Includes\Loan\Loan;
 use Includes\Plans\LoanPlan;
@@ -180,6 +181,27 @@ class Customer extends User
             return REACHEDMAXWITHDRAWAL;
         }
         return NOTENOUGHMONEY;
+    }
+
+    /**
+     * View ALl FDs
+     */
+    public function ViewAllFDs():string
+    {
+        $fds = (new FD)->ViewAllFDsCustomer($this->getNIC());
+        $tblQuery = "";
+        foreach ($fds as $fd) {
+            $status = ($fd["withdrewOrNot"]) ? ("check") : ("ban");
+            $tblQuery = $tblQuery . 
+            "<tr><td></td><td>".$fd["FD_ID"]."</td>
+            <td>".$fd["savingAcc_id"]."</td>
+            <td>".$fd["FD_plan_id"]."</td>
+            <td> R.s ".$fd["amount"]."</td>
+            <td>".$fd["startDate"]."</td>
+            <td>".$fd["maturityDate"]."</td>           
+            <td class='datatable-ct'><i class='fa fa-$status'></i></td>            </tr>";
+        }
+        return $tblQuery;
     }
 
     /**

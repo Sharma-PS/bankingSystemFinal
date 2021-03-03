@@ -23,7 +23,7 @@ class Deposit extends Connection
      */
     public function getAllDeposits():array
     {
-        $sql = "SELECT * FROM deposit ORDER BY deposit_id DESC";
+        $sql = "SELECT * FROM deposit_collection ORDER BY deposit_id DESC";
         $stmt = (new Connection)->connect()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();       

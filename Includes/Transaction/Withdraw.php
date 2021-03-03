@@ -23,7 +23,7 @@ class Withdraw extends Connection
      */
     public function getAllWithdraws():array
     {
-        $sql = "SELECT * FROM withdrawal ORDER BY withdrawal_id DESC";
+        $sql = "SELECT * FROM withdrawal_collection ORDER BY withdrawal_id DESC";
         $stmt = (new Connection)->connect()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(); 
